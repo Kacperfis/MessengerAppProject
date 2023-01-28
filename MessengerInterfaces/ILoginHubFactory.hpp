@@ -1,7 +1,7 @@
 #pragma once
+#include <memory>
 
 #include <ILoginHub.hpp>
-#include <memory>
 
 class ILoginHubFactory
 {

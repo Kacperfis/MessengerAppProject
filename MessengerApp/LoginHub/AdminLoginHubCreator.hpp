@@ -1,8 +1,9 @@
 #pragma once
+#include <memory>
+
 #include <ILoginHubFactory.hpp>
 #include <ILoginHub.hpp>
 #include "AdminLoginHub.hpp"
-#include <memory>
 
 class AdminLoginHubCreator : public ILoginHubFactory
 {

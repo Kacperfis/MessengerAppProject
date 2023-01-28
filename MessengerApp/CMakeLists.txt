@@ -8,6 +8,7 @@ set(MESSENGER_APP_SOURCES
     LoginHub/UserLoginHub.cpp
     LoginHub/AdminLoginHubCreator.cpp
     LoginHub/UserLoginHubCreator.cpp
+    Helpers/LoginHubHelper.cpp
 )
 set(MESSENGER_APP_HEADERS
     MessengerAgent.hpp
@@ -15,6 +16,8 @@ set(MESSENGER_APP_HEADERS
     LoginHub/UserLoginHub.hpp
     LoginHub/AdminLoginHubCreator.hpp
     LoginHub/UserLoginHubCreator.hpp
+    LoginHub/LoginData.hpp
+    Helpers/LoginHubHelper.hpp
 )
 add_library(${TARGET_NAME} STATIC ${MESSENGER_APP_SOURCES} ${MESSENGER_APP_HEADERS})
 target_link_libraries(${TARGET_NAME} MessengerInterfaces)
@@ -23,13 +26,15 @@ target_link_libraries(${TARGET_NAME} MessengerInterfaces)
 enable_testing()
 set(TEST_SOURCES
     Tests/MessengerAgentTests.cpp
+    Tests/UserLoginHubTests.cpp
+    Tests/AdminLoginHubTests.cpp
 )
 
 # set(MOCK_LIST
 
 # )
 
-set(UT_DRIVER ${TARGET_NAME}_UT)
+set(UT_DRIVER ut)
 add_executable(${UT_DRIVER} ${TEST_SOURCES}) #${MOCK_LIST})
 target_link_libraries(${UT_DRIVER} ${TARGET_NAME} gmock_main gtest gmock)
 
