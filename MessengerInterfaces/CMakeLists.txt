@@ -3,6 +3,7 @@ add_custom_target(MessengerInterfaces_HEADERS SOURCES
     EventT.hpp
     IPort.hpp
     IEventHandler.hpp
+    ILoginHub.hpp
 )
 
 add_library(MessengerInterfaces INTERFACE)

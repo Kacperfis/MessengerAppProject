@@ -4,9 +4,17 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(MESSENGER_APP_SOURCES
     MessengerAgent.cpp
+    LoginHub/AdminLoginHub.cpp
+    LoginHub/UserLoginHub.cpp
+    LoginHub/AdminLoginHubCreator.cpp
+    LoginHub/UserLoginHubCreator.cpp
 )
 set(MESSENGER_APP_HEADERS
     MessengerAgent.hpp
+    LoginHub/AdminLoginHub.hpp
+    LoginHub/UserLoginHub.hpp
+    LoginHub/AdminLoginHubCreator.hpp
+    LoginHub/UserLoginHubCreator.hpp
 )
 add_library(${TARGET_NAME} STATIC ${MESSENGER_APP_SOURCES} ${MESSENGER_APP_HEADERS})
 target_link_libraries(${TARGET_NAME} MessengerInterfaces)
