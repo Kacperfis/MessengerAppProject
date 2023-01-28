@@ -5,11 +5,11 @@
 
 MessengerAgent::MessengerAgent()
 {
-    auto adminLoginHubCreator = std::make_shared<AdminLoginHubCreator>();
-    adminLoginHub_ = adminLoginHubCreator->createHub();
+    auto LoginHubCreator = std::make_shared<AdminLoginHubCreator>();
+    LoginHub_ = LoginHubCreator->createHub();
 
-    auto x = adminLoginHub_->login();
-    auto y = adminLoginHub_->logout();
+    auto x = LoginHub_->login();
+    auto y = LoginHub_->logout();
     
     std::cout << "x: " << x << ", y:  " << y << std::endl;
 }

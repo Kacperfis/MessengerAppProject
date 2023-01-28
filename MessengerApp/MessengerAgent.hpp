@@ -8,5 +8,5 @@ class MessengerAgent
 public:
     MessengerAgent();
 private:
-    std::shared_ptr<ILoginHub> adminLoginHub_;
+    std::shared_ptr<ILoginHub> LoginHub_;
 };

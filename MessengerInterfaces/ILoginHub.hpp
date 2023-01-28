@@ -3,7 +3,7 @@
 class ILoginHub
 {
 public: 
-    virtual ~ILoginHub() {}
+    virtual ~ILoginHub() {};
     virtual bool login();
     virtual bool logout();
 };

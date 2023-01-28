@@ -3,7 +3,7 @@
 #include <ILoginHub.hpp>
 #include <memory>
 
-class UserLoginHub : ILoginHub
+class UserLoginHub : public ILoginHub
 {
 public:
     bool login() override;
