@@ -2,14 +2,26 @@
 
 #include "MessengerAgent.hpp"
 #include <LoginHub/AdminLoginHubCreator.hpp>
+#include <Helpers/UIHelper.hpp>
 
-MessengerAgent::MessengerAgent()
+MessengerAgent::MessengerAgent() :
+    userLoginHub_(std::make_shared<UserLoginHub>()),
+    AdminLoginHub_(std::make_shared<AdminLoginHub>()),
+    registrationHandler_(std::make_shared<RegistrationHandler>())
 {
-    // auto LoginHubCreator = std::make_shared<AdminLoginHubCreator>();
-    // LoginHub_ = LoginHubCreator->createHub();
-
-    // auto x = LoginHub_->login();
-    // auto y = LoginHub_->logout();
-    
-    // std::cout << "x: " << x << ", y:  " << y << std::endl;
+    helpers::showEntryPage();
+    int choice;
+    std::cin >> choice;
+    switch (choice)
+    {
+        case 1:
+            registrationHandler_->registrationTrigger();
+        break;
+        case 2:
+        //
+        break;
+        case 3:
+        //
+        break;
+    }
 }

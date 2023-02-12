@@ -1,0 +1,9 @@
+[submodule "build/external/openssl-cmake"]
+	path = build/external/openssl-cmake
+	url = https://github.com/openssl/openssl.git
+[submodule "build/openssl"]
+	path = build/openssl
+	url = https://github.com/openssl/openssl.git
+[submodule "third-party/openssl"]
+	path = third-party/openssl
+	url = https://github.com/openssl/openssl.git
