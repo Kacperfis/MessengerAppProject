@@ -20,8 +20,11 @@ set(MESSENGER_APP_HEADERS
     Helpers/LoginHubHelper.hpp
 )
 add_library(${TARGET_NAME} STATIC ${MESSENGER_APP_SOURCES} ${MESSENGER_APP_HEADERS})
-target_link_libraries(${TARGET_NAME} MessengerInterfaces)
-
+target_link_libraries(${TARGET_NAME}
+    MessengerInterfaces
+    OpenSSL::Crypto
+    OpenSSL::SSL
+)
 
 enable_testing()
 set(TEST_SOURCES
@@ -36,7 +39,7 @@ set(TEST_SOURCES
 
 set(UT_DRIVER ut)
 add_executable(${UT_DRIVER} ${TEST_SOURCES}) #${MOCK_LIST})
-target_link_libraries(${UT_DRIVER} ${TARGET_NAME} gmock_main gtest gmock)
+target_link_libraries(${UT_DRIVER} ${TARGET_NAME} gmock_main gtest gmock OpenSSL::Crypto OpenSSL::SSL)
 
 if (BUILD_COVERAGE_UNIT_TESTS)
     set_target_properties(${TARGET_NAME} PROPERTIES COMPILE_FLAGS ${CMAKE_CXX_FLAGS_COVERAGE})
@@ -46,3 +49,4 @@ if (BUILD_COVERAGE_UNIT_TESTS)
 endif()
 
 add_test(tests ${UT_DRIVER})
+

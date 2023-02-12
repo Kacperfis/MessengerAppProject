@@ -17,6 +17,7 @@ endif()
 
 # common libs
 include(cmake/GTest.cmake)
+include(cmake/OpenSSL.cmake)
 
 enable_testing()
 
