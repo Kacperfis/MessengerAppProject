@@ -5,55 +5,62 @@ EncryptionManager::EncryptionManager(const std::string& path, const std::string&
 
 void EncryptionManager::encryptDataAndSaveToUsersDatabase(const std::string& login, const std::string& password)
 {
-    std::string plaintext = login + "|" + password;
+    std::string plaintext = login + "|" + password + '\n';
     std::string ciphertext = encryptString(plaintext, key_, iv_);
-    std::ofstream file(path_, std::ios::out | std::ios::binary | std::ios::app);
+    std::ofstream file(path_, std::ios::binary | std::ios::app);
 
     if (file.is_open())
     {
-        std::cout << "File opened successfully\n";
-        for (const char& c : ciphertext) if (c != '\n') file << c;
-        file << '\n';
-        if (file.fail() || file.bad()) std::cout << "Error writing to file\n";
+        // Write the ciphertext length
+        size_t ciphertext_length = ciphertext.length();
+        file.write(reinterpret_cast<const char*>(&ciphertext_length), sizeof(ciphertext_length));
+
+        std::cout << "Writing ciphertext_length: " << ciphertext_length << std::endl;
         
-        file.flush();
+        // Write the ciphertext
+        file.write(ciphertext.c_str(), ciphertext.length());
+        if (file.fail() || file.bad()) std::cout << "Error writing to file\n";
         file.close();
     }
     else std::cout << "Error opening file\n";
 }
 
+
 const std::vector<std::string> EncryptionManager::decryptDataFromUsersDatabase()
 {
-    std::vector<std::string> encryptedContent;
-    std::ifstream readFile(path_, std::ios::in | std::ios::binary);
-    if (readFile.is_open())
+    std::vector<std::string> decryptedContent;
+    std::ifstream infile(path_, std::ios::in | std::ios::binary);
+    if (!infile.is_open())
     {
-        std::string fileContent((std::istreambuf_iterator<char>(readFile)), std::istreambuf_iterator<char>());
-        readFile.close();
-
-        size_t startPosition = 0;
-        while (startPosition < fileContent.length())
-        {
-            size_t endPosition = fileContent.find_first_of('\n', startPosition);
-            if (endPosition == std::string::npos)
-            {
-                endPosition = fileContent.length();
-            }
-            encryptedContent.push_back(fileContent.substr(startPosition, endPosition - startPosition));
-            startPosition = endPosition + 1;
-        }
-        std::vector<std::string> decryptedContent;
-        for (const std::string& encryptedString : encryptedContent)
-        {
-            std::string decryptedString = decryptString(encryptedString, key_, iv_);
-            std::cout << "Decrypted plaintext: " << decryptedString << std::endl;
-            decryptedContent.push_back(decryptedString);
-        }
-        return decryptedContent;
+        std::cerr << "Failed to open file: " << path_ << std::endl;
+        return {};
     }
-    else std::cout << "Error opening file for reading\n";
 
-    return {};
+    while (!infile.eof())
+    {
+        // Read the ciphertext length
+        size_t ciphertext_length;
+        infile.read(reinterpret_cast<char*>(&ciphertext_length), sizeof(ciphertext_length));
+
+        // Check if the end of the file is reached
+        if (infile.eof()) break;
+
+        std::cout << "ciphertext_length: " << ciphertext_length << std::endl;
+
+        // Read the ciphertext
+        std::vector<unsigned char> buffer(ciphertext_length);
+        infile.read(reinterpret_cast<char*>(buffer.data()), ciphertext_length);
+
+        std::cout << "Read ciphertext from file" << std::endl;
+
+        // Decrypt the ciphertext
+        std::string decrypted = decryptString(std::string(buffer.begin(), buffer.end()), key_, iv_);
+        std::cout << decrypted << std::endl;
+        decryptedContent.push_back(decrypted);
+    }
+    infile.close();
+
+    return decryptedContent;
 }
 
 // AES-256-CBC encryption
@@ -85,7 +92,7 @@ const std::string EncryptionManager::decryptString(const std::string& ciphertext
     int plaintext_len = ciphertext.length() + EVP_MAX_BLOCK_LENGTH;
     unsigned char* plaintext = new unsigned char[plaintext_len];
     int len;
-    EVP_DecryptUpdate(ctx, plaintext, &len, (unsigned char*)ciphertext.c_str(), ciphertext.length());
+    EVP_DecryptUpdate(ctx, plaintext, &len, (unsigned char*)ciphertext.data(), ciphertext.length());
     auto plaintext_len1 = len;
 
     EVP_DecryptFinal_ex(ctx, plaintext + len, &len);
