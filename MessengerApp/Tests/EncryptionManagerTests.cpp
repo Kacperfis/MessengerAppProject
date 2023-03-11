@@ -3,20 +3,21 @@
 
 #include <Encryption/EncryptionManager.hpp>
 
-TEST(EncryptionManagerTests, shouldEncryptTheMessageSuccesfully)
+
+
+TEST(EncryptionManagerTests, shouldEncryptAndDecryptTheMessageSuccesfully)
 {
-    auto encryptionManagerPtr = std::make_shared<EncryptionManager>();
-    std::string login = "onesadsadsadsadsad";
-    std::string password = "twoasdsadsadasdsada\n";
-    encryptionManagerPtr->encrypt(login, password);
+    std::shared_ptr<EncryptionManager> encryptionManagerPtr;
+    const std::string login = "login";
+    const std::string password = "password";
+
+    // Encryption key and IV
+    const std::string key = "0123456789abcdef0123456789abcdef";
+    const std::string iv = "0123456789abcdef";
+    const std::string text = login + "|" + password;
+
+    auto encryptedMessage = encryptionManagerPtr->encryptString(text, key, iv);
+    auto decryptedMessage = encryptionManagerPtr->decryptString(encryptedMessage, key, iv);
+
+    EXPECT_EQ(decryptedMessage, text);
 }
-
-// TEST(EncryptionManagerTests, shouldDecryptTheMessageSuccesfully)
-// {
-    
-// }
-
-// TEST(EncryptionManagerTests, shouldEncryptAndDecryptTheMessageSuccesfully)
-// {
-    
-// }

@@ -11,7 +11,11 @@ void EncryptionManager::encrypt(const std::string& login, const std::string& pas
     std::string iv = "0123456789abcdef";
 
     // Encrypt the plaintext
+<<<<<<< HEAD
     std::string ciphertext = encrypt_string(plaintext, key, iv);
+=======
+    std::string ciphertext = encryptString(plaintext, key, iv);
+>>>>>>> afdc225f ([NF] Added openSSL library usage to EncryptionManager)
     std::cout << "Ciphertext: " << ciphertext << std::endl;
 
     // Save the encrypted content to a file
@@ -70,7 +74,11 @@ void EncryptionManager::encrypt(const std::string& login, const std::string& pas
         // Decrypt the ciphertext
         std::vector<std::string> decrypted_content;
         for (const std::string& encrypted_str : encrypted_content) {
+<<<<<<< HEAD
             std::string decrypted_str = decrypt_string(encrypted_str, key, iv);
+=======
+            std::string decrypted_str = decryptString(encrypted_str, key, iv);
+>>>>>>> afdc225f ([NF] Added openSSL library usage to EncryptionManager)
             std::cout << "Decrypted plaintext: " << decrypted_str << std::endl;
             decrypted_content.push_back(decrypted_str);
         }
@@ -83,53 +91,46 @@ void EncryptionManager::encrypt(const std::string& login, const std::string& pas
     }
 }
 
-// Encrypt a string using AES-256-CBC encryption
-std::string EncryptionManager::encrypt_string(const std::string& plaintext, const std::string& key, const std::string& iv)
+// AES-256-CBC encryption
+const std::string EncryptionManager::encryptString(const std::string& plaintext, const std::string& key, const std::string& iv)
 {
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
     EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, (unsigned char*)key.c_str(), (unsigned char*)iv.c_str());
 
-    // Determine the size of the output buffer
     int ciphertext_len = plaintext.length() + EVP_MAX_BLOCK_LENGTH;
     unsigned char* ciphertext = new unsigned char[ciphertext_len];
 
-    // Encrypt the plaintext
     int len;
     EVP_EncryptUpdate(ctx, ciphertext, &len, (unsigned char*)plaintext.c_str(), plaintext.length());
-    int ciphertext_len1 = len;
+    auto ciphertext_len1 = len;
 
     EVP_EncryptFinal_ex(ctx, ciphertext + len, &len);
-    int ciphertext_len2 = len;
+    auto ciphertext_len2 = len;
 
     EVP_CIPHER_CTX_free(ctx);
 
-    // Concatenate the ciphertext
     std::string result((char*)ciphertext, ciphertext_len1 + ciphertext_len2);
     delete[] ciphertext;
     return result;
 }
 
-// Decrypt a string using AES-256-CBC encryption
-std::string EncryptionManager::decrypt_string(const std::string& ciphertext, const std::string& key, const std::string& iv)
+const std::string EncryptionManager::decryptString(const std::string& ciphertext, const std::string& key, const std::string& iv)
 {
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
     EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, (unsigned char*)key.c_str(), (unsigned char*)iv.c_str());
 
-    // Determine the size of the output buffer
     int plaintext_len = ciphertext.length() + EVP_MAX_BLOCK_LENGTH;
     unsigned char* plaintext = new unsigned char[plaintext_len];
 
-    // Decrypt the ciphertext
     int len;
     EVP_DecryptUpdate(ctx, plaintext, &len, (unsigned char*)ciphertext.c_str(), ciphertext.length());
-    int plaintext_len1 = len;
+    auto plaintext_len1 = len;
 
     EVP_DecryptFinal_ex(ctx, plaintext + len, &len);
-    int plaintext_len2 = len;
+    auto plaintext_len2 = len;
 
     EVP_CIPHER_CTX_free(ctx);
 
-    // Concatenate the plaintext
     std::string result((char*)plaintext, plaintext_len1 + plaintext_len2);
     delete[] plaintext;
     return result;
