@@ -12,7 +12,7 @@ enum class accountType
 class RegistrationHandler
 {
 public:
-    RegistrationHandler();
+    RegistrationHandler(){};
     void registrationTrigger();
     void registerAdmin();
     void registerUser();

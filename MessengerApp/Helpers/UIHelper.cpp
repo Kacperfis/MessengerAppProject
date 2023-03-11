@@ -1,7 +1,9 @@
 #include <iostream>
-#include <openssl/aes.h>
 
-#include <Helpers/UIHelper.hpp>
+#include "Helpers/UIHelper.hpp"
+
+namespace helpers
+{
 
 void showEntryPage()
 {
@@ -30,3 +32,5 @@ void showRegistrationForm(
     std::cout << "type your password: " << std::endl;
     stdInput >> password;
 }
+
+}  // namespace helpers

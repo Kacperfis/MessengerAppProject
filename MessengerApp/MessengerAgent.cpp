@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "MessengerAgent.hpp"
-#include <LoginHub/AdminLoginHubCreator.hpp>
 #include <Helpers/UIHelper.hpp>
 
 MessengerAgent::MessengerAgent() :

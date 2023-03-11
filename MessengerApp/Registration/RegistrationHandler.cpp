@@ -1,4 +1,4 @@
-#include <Registration/RegistrationHandler.hpp>
+#include "RegistrationHandler.hpp"
 
 #include <Helpers/UIHelper.hpp>
 
@@ -13,4 +13,14 @@ void RegistrationHandler::registrationTrigger()
     {
         registerAdmin();
     }
+}
+
+void RegistrationHandler::registerAdmin()
+{
+    return;
+}
+
+void RegistrationHandler::registerUser()
+{
+    return;
 }
