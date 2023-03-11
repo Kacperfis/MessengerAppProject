@@ -11,11 +11,8 @@ void EncryptionManager::encrypt(const std::string& login, const std::string& pas
     std::string iv = "0123456789abcdef";
 
     // Encrypt the plaintext
-<<<<<<< HEAD
-    std::string ciphertext = encrypt_string(plaintext, key, iv);
-=======
+
     std::string ciphertext = encryptString(plaintext, key, iv);
->>>>>>> afdc225f ([NF] Added openSSL library usage to EncryptionManager)
     std::cout << "Ciphertext: " << ciphertext << std::endl;
 
     // Save the encrypted content to a file
@@ -74,11 +71,8 @@ void EncryptionManager::encrypt(const std::string& login, const std::string& pas
         // Decrypt the ciphertext
         std::vector<std::string> decrypted_content;
         for (const std::string& encrypted_str : encrypted_content) {
-<<<<<<< HEAD
-            std::string decrypted_str = decrypt_string(encrypted_str, key, iv);
-=======
+
             std::string decrypted_str = decryptString(encrypted_str, key, iv);
->>>>>>> afdc225f ([NF] Added openSSL library usage to EncryptionManager)
             std::cout << "Decrypted plaintext: " << decrypted_str << std::endl;
             decrypted_content.push_back(decrypted_str);
         }
