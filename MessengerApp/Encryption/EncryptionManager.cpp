@@ -11,20 +11,15 @@ void EncryptionManager::encryptDataAndSaveToUsersDatabase(const std::string& log
 
     if (file.is_open())
     {
-        // Write the ciphertext length
         size_t ciphertext_length = ciphertext.length();
         file.write(reinterpret_cast<const char*>(&ciphertext_length), sizeof(ciphertext_length));
-
-        std::cout << "Writing ciphertext_length: " << ciphertext_length << std::endl;
         
-        // Write the ciphertext
         file.write(ciphertext.c_str(), ciphertext.length());
         if (file.fail() || file.bad()) std::cout << "Error writing to file\n";
         file.close();
     }
     else std::cout << "Error opening file\n";
 }
-
 
 const std::vector<std::string> EncryptionManager::decryptDataFromUsersDatabase()
 {
@@ -38,24 +33,13 @@ const std::vector<std::string> EncryptionManager::decryptDataFromUsersDatabase()
 
     while (!infile.eof())
     {
-        // Read the ciphertext length
         size_t ciphertext_length;
         infile.read(reinterpret_cast<char*>(&ciphertext_length), sizeof(ciphertext_length));
-
-        // Check if the end of the file is reached
         if (infile.eof()) break;
 
-        std::cout << "ciphertext_length: " << ciphertext_length << std::endl;
-
-        // Read the ciphertext
         std::vector<unsigned char> buffer(ciphertext_length);
         infile.read(reinterpret_cast<char*>(buffer.data()), ciphertext_length);
-
-        std::cout << "Read ciphertext from file" << std::endl;
-
-        // Decrypt the ciphertext
         std::string decrypted = decryptString(std::string(buffer.begin(), buffer.end()), key_, iv_);
-        std::cout << decrypted << std::endl;
         decryptedContent.push_back(decrypted);
     }
     infile.close();

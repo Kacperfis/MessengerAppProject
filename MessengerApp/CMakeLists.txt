@@ -38,7 +38,6 @@ target_link_libraries(${TARGET_NAME}
 
 enable_testing()
 set(TEST_SOURCES
-    Tests/MessengerAgentTests.cpp
     Tests/UserLoginHubTests.cpp
     Tests/AdminLoginHubTests.cpp
     Tests/EncryptionManagerTests.cpp

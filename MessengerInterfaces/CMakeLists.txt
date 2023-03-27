@@ -1,8 +1,5 @@
 add_custom_target(MessengerInterfaces_HEADERS SOURCES
-    Event.hpp
-    EventT.hpp
-    IPort.hpp
-    IEventHandler.hpp
+    ILoginHubFactory.hpp
     ILoginHub.hpp
 )
 
