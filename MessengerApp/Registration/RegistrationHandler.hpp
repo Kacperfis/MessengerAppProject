@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include <iostream>
+#include <Database/DatabaseController.hpp>
 
 enum class accountType
 {
@@ -20,5 +21,6 @@ private:
     std::string login_;
     std::string password_;
     accountType accountType_;
+    std::shared_ptr<DatabaseController> databaseController_;
 };
 

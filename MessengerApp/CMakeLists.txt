@@ -12,6 +12,7 @@ set(MESSENGER_APP_SOURCES
     Encryption/EncryptionManager.cpp
     Helpers/LoginHubHelper.cpp
     Helpers/UIHelper.cpp
+    Database/DatabaseController.cpp
 )
 set(MESSENGER_APP_HEADERS
     MessengerAgent.hpp
@@ -24,6 +25,7 @@ set(MESSENGER_APP_HEADERS
     Encryption/EncryptionManager.hpp
     Helpers/LoginHubHelper.hpp
     Helpers/UIHelper.hpp
+    Database/DatabaseController.hpp
 )
 
 find_package(OpenSSL REQUIRED)
@@ -38,9 +40,11 @@ target_link_libraries(${TARGET_NAME}
 
 enable_testing()
 set(TEST_SOURCES
+    Tests/common/commonFixture.cpp
     Tests/UserLoginHubTests.cpp
     Tests/AdminLoginHubTests.cpp
     Tests/EncryptionManagerTests.cpp
+    Tests/DatabaseControllerTests.cpp
 )
 
 set(UT_DRIVER ut)

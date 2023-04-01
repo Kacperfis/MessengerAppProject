@@ -1,5 +1,6 @@
-#include "RegistrationHandler.hpp"
+#include <ranges>
 
+#include "RegistrationHandler.hpp"
 #include <Helpers/UIHelper.hpp>
 
 void RegistrationHandler::registrationTrigger()
@@ -22,5 +23,15 @@ void RegistrationHandler::registerAdmin()
 
 void RegistrationHandler::registerUser()
 {
-    return;
+    databaseController_->LoadDatabase();
+    auto registeredUsersData = databaseController_->getRegisteredUsersData();
+    auto userData = std::ranges::find_if(registeredUsersData, [this](const auto& item){
+        return item.first == login_ && item.second == password_;
+    });
+    if (userData != registeredUsersData.end())
+    {
+        std::cout << "User with given login is already registered" << std::endl;
+        return;
+    }
+    databaseController_->registerUser(login_, password_);
 }
