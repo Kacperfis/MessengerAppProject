@@ -2,6 +2,6 @@
 
 int main()
 {
-    MessengerAgent();
+    MessengerAgent("/home/kacper/programming/MessengerAppProject/MessengerApp/Database/registeredUsersData.txt", std::cin);
     return 0;
 }

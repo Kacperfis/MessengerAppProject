@@ -3,6 +3,7 @@ set(TARGET_NAME MessengerApp)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(MESSENGER_APP_SOURCES
+    #main.cpp
     MessengerAgent.cpp
     LoginHub/AdminLoginHub.cpp
     LoginHub/UserLoginHub.cpp

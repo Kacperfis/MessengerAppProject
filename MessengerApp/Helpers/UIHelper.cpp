@@ -17,16 +17,9 @@ void showEntryPage()
 void showRegistrationForm(
     std::string& login,
     std::string& password,
-    accountType& type,
     std::istream& stdInput)
 {
     std::cout << "================================================" << std::endl;
-    std::cout << "Select account type: " << std::endl;
-    std::cout << "1. User" << std::endl;
-    std::cout << "2. Admin" << std::endl;
-    int choice;
-    stdInput >> choice;
-    (choice == 1 ? type = accountType::User : type = accountType::Admin);
     std::cout << "type your login: " << std::endl;
     stdInput >> login;
     std::cout << "type your password: " << std::endl;
