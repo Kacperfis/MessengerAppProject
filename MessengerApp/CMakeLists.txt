@@ -46,6 +46,7 @@ set(TEST_SOURCES
     Tests/AdminLoginHubTests.cpp
     Tests/EncryptionManagerTests.cpp
     Tests/DatabaseControllerTests.cpp
+    Tests/RegistrationHandlerTests.cpp
 )
 
 set(UT_DRIVER ut)

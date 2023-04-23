@@ -12,7 +12,7 @@ TEST(UserLoginHubTests, ShouldLoginAndLogoutSuccesfully)
 
     const std::string input = "test_user\ntest_password\n";
     auto inputData = processInput(input);
-    EXPECT_TRUE(LoginHub->login(inputData.input));
+    EXPECT_TRUE(LoginHub->login(*inputData.input));
     EXPECT_TRUE(LoginHub->isLogged());
     EXPECT_TRUE(LoginHub->logout());
     EXPECT_FALSE(LoginHub->isLogged());

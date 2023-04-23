@@ -19,11 +19,10 @@ void clearFile(const std::string& path)
 InputData processInput(const std::string& input)
 {
     static TestInputStream testInput(input);
-    NullStream null_stream;
+    static NullStream null_stream;
     std::streambuf* oldBuffer = std::cout.rdbuf();
     std::cout.rdbuf(null_stream.rdbuf());
-
-    return {testInput, oldBuffer};
+    return {&testInput, oldBuffer};
 }
 
 void clearBuffer(std::streambuf* oldBuffer)

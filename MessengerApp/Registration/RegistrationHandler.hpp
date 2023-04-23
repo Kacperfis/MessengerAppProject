@@ -8,13 +8,13 @@
 class RegistrationHandler
 {
 public:
-    RegistrationHandler(const std::shared_ptr<DatabaseController> databaseController, std::istream& inputStream);
+    RegistrationHandler(const std::shared_ptr<IDatabaseController> databaseController, std::istream& inputStream);
     void registrationTrigger();
-    void registerUser();
 private:
+    void registerUser();
     std::string login_;
     std::string password_;
-    std::shared_ptr<DatabaseController> databaseController_;
+    std::shared_ptr<IDatabaseController> databaseController_;
     std::istream& inputStream_;
 };
 

@@ -3,7 +3,7 @@
 #include "RegistrationHandler.hpp"
 #include <Helpers/UIHelper.hpp>
 
-RegistrationHandler::RegistrationHandler(const std::shared_ptr<DatabaseController> databaseController, std::istream& inputStream)
+RegistrationHandler::RegistrationHandler(const std::shared_ptr<IDatabaseController> databaseController, std::istream& inputStream)
     : databaseController_(databaseController), inputStream_(inputStream) {};
 
 void RegistrationHandler::registrationTrigger()

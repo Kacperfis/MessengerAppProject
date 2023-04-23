@@ -28,7 +28,7 @@ private:
 
 struct InputData
 {
-    TestInputStream& input;
+    TestInputStream* input;
     std::streambuf* oldBuffer;
 };
 
