@@ -1,5 +1,4 @@
 #include <ranges>
-
 #include "RegistrationHandler.hpp"
 #include <Helpers/UIHelper.hpp>
 

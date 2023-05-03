@@ -6,7 +6,7 @@
 
 TEST(databaseControllerTests, shouldLoadDataFromDatabaseSuccesfully)
 {
-    const std::string path = "/home/kacper/programming/MessengerAppProject/MessengerApp/Tests/testDatabases/testLoadDatabase.txt";
+    const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/testLoadDatabase.txt";
     auto databaseController = std::make_shared<DatabaseController>(path);
     databaseController->LoadDatabase();
     EXPECT_EQ(databaseController->getRegisteredUsersData().size(), 2);
@@ -14,7 +14,7 @@ TEST(databaseControllerTests, shouldLoadDataFromDatabaseSuccesfully)
 
 TEST(databaseControllerTests, shouldRegisterUserSavingDataToDatabase)
 {
-    const std::string path = "/home/kacper/programming/MessengerAppProject/MessengerApp/Tests/testDatabases/testSaveDatabase.txt";
+    const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/testSaveDatabase.txt";
     auto databaseController = std::make_shared<DatabaseController>(path);
     auto login = "userLogin123";
     auto password = "userPassword123";

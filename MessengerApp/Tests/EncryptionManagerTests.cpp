@@ -24,7 +24,7 @@ TEST(EncryptionManagerTests, shouldEncryptTheDataSaveItToFileAndDecryptFromFileS
 {
     const std::string key = "0123456789abcdef0123456789abcdef";
     const std::string iv = "0123456789abcdef";
-    const std::string path = "/home/kacper/programming/MessengerAppProject/MessengerApp/Tests/testDatabases/testUserDatabase.txt";
+    const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/testUserDatabase.txt";
 
     auto encryptionManagerPtr = std::make_shared<EncryptionManager>(path, key, iv);
     const std::string login = "UserLoginsasdsadsankJklsdajfkljsaldkjasAJKSDJSALKDJSALKDJ1232132131";

@@ -1,7 +1,7 @@
 #include "EncryptionManager.hpp"
 #include <openssl/evp.h>
 
-EncryptionManager::EncryptionManager(const std::string& path, const std::string& key, const std::string iv) : path_(path), key_(key), iv_(iv) {};
+EncryptionManager::EncryptionManager(const std::string& path, const std::string& key, const std::string iv) : path_(path), key_(key), iv_(iv) {}
 
 void EncryptionManager::encryptDataAndSaveToUsersDatabase(const std::string& login, const std::string& password)
 {
