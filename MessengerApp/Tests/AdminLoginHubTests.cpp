@@ -4,9 +4,11 @@
 #include <LoginHub/AdminLoginHubCreator.hpp>
 #include <LoginHub/AdminLoginHub.hpp>
 #include <Tests/common/commonFixture.hpp>
+#include <Common/Logger.hpp>
 
 TEST(AdminLoginHubTests, ShouldLoginAndLogoutSuccesfully)
 {
+    Logger::testName_ = "AdminLoginHubTests_ShouldLoginAndLogoutSuccesfully";
     auto LoginHubCreator = std::make_shared<AdminLoginHubCreator>();
     auto LoginHub = LoginHubCreator->createHub();
 

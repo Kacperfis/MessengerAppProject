@@ -4,9 +4,11 @@
 #include <LoginHub/UserLoginHubCreator.hpp>
 #include <LoginHub/UserLoginHub.hpp>
 #include <Tests/common/commonFixture.hpp>
+#include <Common/Logger.hpp>
 
 TEST(UserLoginHubTests, ShouldLoginAndLogoutSuccesfully)
 {
+    Logger::testName_ = "UserLoginHubTests_ShouldLoginAndLogoutSuccesfully";
     auto LoginHubCreator = std::make_shared<UserLoginHubCreator>();
     auto LoginHub = LoginHubCreator->createHub();
 

@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+#pragma once
+
+>>>>>>> fde101d9 ([NF] Adding Logger to MessengerApp project)
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -21,9 +26,8 @@ public:
     Logger(const std::string& prefix);
     ~Logger();
     void log(const Severity severity, const std::string& message);
+    static std::string testName_;
 private:
-    std::string getTestName();
-
     std::ofstream file_;
     std::string prefix_;
     std::vector<std::string> severityVec_ = {"info", "debug", "warning", "error"};

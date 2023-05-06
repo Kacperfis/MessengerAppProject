@@ -16,5 +16,6 @@ private:
     std::string password_;
     std::shared_ptr<IDatabaseController> databaseController_;
     std::istream& inputStream_;
+    Logger logger_;
 };
 

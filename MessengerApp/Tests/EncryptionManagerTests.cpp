@@ -6,6 +6,7 @@
 
 TEST(EncryptionManagerTests, shouldEncryptAndDecryptTheMessageSuccesfully)
 {
+    Logger::testName_ = "EncryptionManagerTests_shouldEncryptAndDecryptTheMessageSuccesfully";
     std::shared_ptr<EncryptionManager> encryptionManagerPtr;
     const std::string login = "UserLogin";
     const std::string password = "UserPassword";
@@ -22,6 +23,7 @@ TEST(EncryptionManagerTests, shouldEncryptAndDecryptTheMessageSuccesfully)
 
 TEST(EncryptionManagerTests, shouldEncryptTheDataSaveItToFileAndDecryptFromFileSuccesfully)
 {
+    Logger::testName_ = "EncryptionManagerTests_shouldEncryptTheDataSaveItToFileAndDecryptFromFileSuccesfully";
     const std::string key = "0123456789abcdef0123456789abcdef";
     const std::string iv = "0123456789abcdef";
     const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/testUserDatabase.txt";

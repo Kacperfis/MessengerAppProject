@@ -3,17 +3,27 @@
 #include "AdminLoginHub.hpp"
 #include <Helpers/LoginHubHelper.hpp>
 
+AdminLoginHub::AdminLoginHub() : logger_("AdminLoginHub") {}
+
 bool AdminLoginHub::login(std::istream& stdInput)
 {
-   std::cout << "Logging admin" << std::endl;
+    logger_.log(Severity::info, "Logging to the Admin account");
     loginDataPtr_ = std::move(helpers::login(stdInput));
-    if (!setStatus(loginStatus::Logged)) return false;
+    if (!setStatus(loginStatus::Logged))
+    {
+        logger_.log(Severity::warning, "Login unsuccessful");
+        return false;
+    }
     return true;
 }
 
 bool AdminLoginHub::logout()
 {
-    if (!setStatus(loginStatus::LoggedOut)) return false;
+    if (!setStatus(loginStatus::LoggedOut))
+    {
+        logger_.log(Severity::warning, "Logout unsuccessful");
+        return false;
+    }
     return true;
 }
 

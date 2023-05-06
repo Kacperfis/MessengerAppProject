@@ -3,7 +3,7 @@
 #include <Helpers/UIHelper.hpp>
 
 RegistrationHandler::RegistrationHandler(const std::shared_ptr<IDatabaseController> databaseController, std::istream& inputStream)
-    : databaseController_(databaseController), inputStream_(inputStream) {};
+    : databaseController_(databaseController), inputStream_(inputStream), logger_("RegistrationHandler") {};
 
 void RegistrationHandler::registrationTrigger()
 {
@@ -20,8 +20,9 @@ void RegistrationHandler::registerUser()
     });
     if (userData != registeredUsersData.end())
     {
-        std::cout << "User with given login is already registered" << std::endl;
+        logger_.log(Severity::warning, "User with given login is already registered");
         return;
     }
     databaseController_->registerUser(login_, password_);
+    logger_.log(Severity::info, "Registration succesfull");
 }

@@ -7,6 +7,7 @@
 #include <cmath>
 #include <sstream>
 #include <algorithm>
+#include <Common/Logger.hpp>
 
 #include <Common/Logger.hpp>
 

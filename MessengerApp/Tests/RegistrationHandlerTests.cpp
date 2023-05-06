@@ -30,6 +30,7 @@ public:
 
 TEST_F(RegistrationHandlerTests, shouldTriggerRegistrationAndRegisterUserSuccessfully)
 {
+    Logger::testName_ = "RegistrationHandlerTests_shouldTriggerRegistrationAndRegisterUserSuccessfully";
     std::map<std::string, std::string> registeredUsersData;
     registeredUsersData.insert(std::make_pair("test_user", "test_password"));
 

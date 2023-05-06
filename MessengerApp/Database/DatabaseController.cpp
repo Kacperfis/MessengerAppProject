@@ -3,7 +3,8 @@
 #include <ranges>
 
 DatabaseController::DatabaseController(const std::string& path) : encryptionManagerPtr_(
-    std::make_unique<EncryptionManager>(path, "0123456789abcdef0123456789abcdef", "0123456789abcdef")) {}
+    std::make_unique<EncryptionManager>(path, "0123456789abcdef0123456789abcdef", "0123456789abcdef")),
+    logger_("DatabaseController") {}
 
 void DatabaseController::LoadDatabase()
 {
@@ -19,6 +20,7 @@ void DatabaseController::LoadDatabase()
             }
         }
     }
+    logger_.log(Severity::info, "Database loaded succesfully");
 }
 
 void DatabaseController::registerUser(const std::string& login, const std::string& password)

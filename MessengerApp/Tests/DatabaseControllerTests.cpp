@@ -7,8 +7,7 @@
 
 TEST(databaseControllerTests, shouldLoadDataFromDatabaseSuccesfully)
 {
-    char testName[] = "databaseControllerTests_shouldLoadDataFromDatabaseSuccesfully";
-    putenv(testName);
+    Logger::testName_ = "databaseControllerTests_shouldLoadDataFromDatabaseSuccesfully";
     const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/testLoadDatabase.txt";
     auto databaseController = std::make_shared<DatabaseController>(path);
     databaseController->LoadDatabase();
@@ -17,8 +16,7 @@ TEST(databaseControllerTests, shouldLoadDataFromDatabaseSuccesfully)
 
 TEST(databaseControllerTests, shouldRegisterUserSavingDataToDatabase)
 {
-    char testName[] = "databaseControllerTests_shouldRegisterUserSavingDataToDatabase";
-    putenv(testName);
+    Logger::testName_ = "databaseControllerTests_shouldRegisterUserSavingDataToDatabase";
     const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/testSaveDatabase.txt";
     auto databaseController = std::make_shared<DatabaseController>(path);
     auto login = "userLogin123";
