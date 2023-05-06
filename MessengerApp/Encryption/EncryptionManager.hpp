@@ -8,6 +8,8 @@
 #include <sstream>
 #include <algorithm>
 
+#include <Common/Logger.hpp>
+
 class EncryptionManager
 {
 public:
@@ -20,4 +22,5 @@ private:
     const std::string path_;
     const std::string key_;
     const std::string iv_;
+    Logger logger_;
 };

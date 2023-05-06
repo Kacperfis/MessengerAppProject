@@ -1,7 +1,7 @@
 #include "EncryptionManager.hpp"
 #include <openssl/evp.h>
 
-EncryptionManager::EncryptionManager(const std::string& path, const std::string& key, const std::string iv) : path_(path), key_(key), iv_(iv) {}
+EncryptionManager::EncryptionManager(const std::string& path, const std::string& key, const std::string iv) : path_(path), key_(key), iv_(iv), logger_("EncryptionManager") {}
 
 void EncryptionManager::encryptDataAndSaveToUsersDatabase(const std::string& login, const std::string& password)
 {
@@ -15,10 +15,11 @@ void EncryptionManager::encryptDataAndSaveToUsersDatabase(const std::string& log
         file.write(reinterpret_cast<const char*>(&ciphertext_length), sizeof(ciphertext_length));
         
         file.write(ciphertext.c_str(), ciphertext.length());
-        if (file.fail() || file.bad()) std::cout << "Error writing to file\n";
+        if (file.fail() || file.bad()) logger_.log(Severity::error, "Error writing to file");
         file.close();
+        logger_.log(Severity::info, "Encrypted data succesfully saved to users database");
     }
-    else std::cout << "Error opening file\n";
+    else logger_.log(Severity::error, "Error opening file");
 }
 
 const std::vector<std::string> EncryptionManager::decryptDataFromUsersDatabase()
@@ -27,7 +28,7 @@ const std::vector<std::string> EncryptionManager::decryptDataFromUsersDatabase()
     std::ifstream infile(path_, std::ios::in | std::ios::binary);
     if (!infile.is_open())
     {
-        std::cerr << "Failed to open file: " << path_ << std::endl;
+        logger_.log(Severity::error, "Failed to open file: " + path_);
         return {};
     }
 
@@ -43,6 +44,7 @@ const std::vector<std::string> EncryptionManager::decryptDataFromUsersDatabase()
         decryptedContent.push_back(decrypted);
     }
     infile.close();
+    logger_.log(Severity::info, "Succesfully decrypted data from users database");
 
     return decryptedContent;
 }
