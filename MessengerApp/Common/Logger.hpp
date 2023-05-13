@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 #pragma once
 
->>>>>>> fde101d9 ([NF] Adding Logger to MessengerApp project)
 #include <iostream>
 #include <fstream>
 #include <string>
