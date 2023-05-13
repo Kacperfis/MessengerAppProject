@@ -7,41 +7,51 @@
 using testing::Return;
 using testing::_;
 
-class RegistrationHandlerTests : public ::testing::Test
-{
-public:
-    void SetUp()
-    {
-        const std::string input = "test_user\ntest_password\n";
-        inputData_ = processInput(input);
-        databaseControllerMock_ = std::make_shared<DatabaseControllerMock>();
-        sut_ = std::make_shared<RegistrationHandler>(databaseControllerMock_, *inputData_.input);
-    }
-
-    void TearDown()
-    {
-        clearBuffer(inputData_.oldBuffer);
-    }
-
-    InputData inputData_;
-    std::shared_ptr<DatabaseControllerMock> databaseControllerMock_;
-    std::shared_ptr<RegistrationHandler> sut_;
-};
-
-TEST_F(RegistrationHandlerTests, shouldTriggerRegistrationAndRegisterUserSuccessfully)
+TEST(RegistrationHandlerTests, shouldTriggerRegistrationAndRegisterUserSuccessfully)
 {
     Logger::testName_ = "RegistrationHandlerTests_shouldTriggerRegistrationAndRegisterUserSuccessfully";
+    auto buffer = saveCleanOutputBuffer();
+
+    std::stringstream input("test_user2\ntest_password2\n");
+    auto databaseControllerMock = std::make_shared<DatabaseControllerMock>();
+    auto sut = std::make_shared<RegistrationHandler>(databaseControllerMock, input);
     std::map<std::string, std::string> registeredUsersData;
     registeredUsersData.insert(std::make_pair("test_user", "test_password"));
 
-    EXPECT_CALL(*databaseControllerMock_, LoadDatabase())
+    EXPECT_CALL(*databaseControllerMock, LoadDatabase())
         .Times(1);
 
-    EXPECT_CALL(*databaseControllerMock_, getRegisteredUsersData())
+    EXPECT_CALL(*databaseControllerMock, getRegisteredUsersData())
         .WillOnce(Return(registeredUsersData));
 
-    EXPECT_CALL(*databaseControllerMock_, registerUser(_,_))
+    EXPECT_CALL(*databaseControllerMock, registerUser(_,_))
         .Times(1);
 
-    sut_->registrationTrigger();
+    auto result = sut->registrationTrigger();
+    EXPECT_TRUE(result);
+
+    clearBuffer(buffer);
+}
+
+TEST(RegistrationHandlerTests, shouldTriggerRegistrationAndNotRegisterAlreadyRegisteredUser)
+{
+    Logger::testName_ = "RegistrationHandlerTests_shouldTriggerRegistrationAndNotRegisterAlreadyRegisteredUser";
+    auto buffer = saveCleanOutputBuffer();
+
+    std::stringstream input("test_user\ntest_password\n");
+    auto databaseControllerMock = std::make_shared<DatabaseControllerMock>();
+    auto sut = std::make_shared<RegistrationHandler>(databaseControllerMock, input);
+    std::map<std::string, std::string> registeredUsersData;
+    registeredUsersData.insert(std::make_pair("test_user", "test_password"));
+
+    EXPECT_CALL(*databaseControllerMock, LoadDatabase())
+        .Times(1);
+
+    EXPECT_CALL(*databaseControllerMock, getRegisteredUsersData())
+        .WillOnce(Return(registeredUsersData));
+
+    auto result = sut->registrationTrigger();
+    EXPECT_FALSE(result);
+
+    clearBuffer(buffer);
 }

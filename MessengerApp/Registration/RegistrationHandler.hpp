@@ -9,9 +9,10 @@ class RegistrationHandler
 {
 public:
     RegistrationHandler(const std::shared_ptr<IDatabaseController> databaseController, std::istream& inputStream);
-    void registrationTrigger();
+    bool registrationTrigger();
+    bool isUserAlreadyRegistered(const std::map<std::string, std::string>& registeredUsersData);
 private:
-    void registerUser();
+    bool registerUser();
     std::string login_;
     std::string password_;
     std::shared_ptr<IDatabaseController> databaseController_;

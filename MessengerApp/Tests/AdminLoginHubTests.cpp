@@ -9,15 +9,16 @@
 TEST(AdminLoginHubTests, ShouldLoginAndLogoutSuccesfully)
 {
     Logger::testName_ = "AdminLoginHubTests_ShouldLoginAndLogoutSuccesfully";
+    auto buffer = saveCleanOutputBuffer();
+
     auto LoginHubCreator = std::make_shared<AdminLoginHubCreator>();
     auto LoginHub = LoginHubCreator->createHub();
 
-    const std::string input = "test_admin\ntest_password\n";
-    auto inputData = processInput(input);
-    EXPECT_TRUE(LoginHub->login(*inputData.input));
+    std::stringstream input("test_admin\ntest_password\n");
+    EXPECT_TRUE(LoginHub->login(input));
     EXPECT_TRUE(LoginHub->isLogged());
     EXPECT_TRUE(LoginHub->logout());
     EXPECT_FALSE(LoginHub->isLogged());
 
-    clearBuffer(inputData.oldBuffer);
+    clearBuffer(buffer);
 }

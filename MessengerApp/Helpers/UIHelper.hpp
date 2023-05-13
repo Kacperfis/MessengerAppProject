@@ -6,9 +6,8 @@ namespace helpers
 {
 
 void showEntryPage();
-void showRegistrationForm(
-    std::string& login,
-    std::string& password,
-    std::istream& stdInput);
+void showRegistrationForm(std::string& login, std::string& password, std::istream& stdInput);
+void userAlreadyRegisteredMessage();
+void userSuccessfullyRegisteredMessage();
 
 }  // namespace helpers

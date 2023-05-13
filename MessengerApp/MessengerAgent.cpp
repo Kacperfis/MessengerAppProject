@@ -16,13 +16,9 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
     switch (choice)
     {
         case 1:
-            registrationHandler_->registrationTrigger();
-        break;
-        case 2:
-        //
-        break;
-        case 3:
-        //
+            auto result = registrationHandler_->registrationTrigger();
+            if (result) helpers::userSuccessfullyRegisteredMessage();
+            else helpers::userAlreadyRegisteredMessage();
         break;
     }
 }
