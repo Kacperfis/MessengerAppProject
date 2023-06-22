@@ -16,7 +16,7 @@ public:
 private:
     std::shared_ptr<UserLoginHub> userLoginHub_;
     std::shared_ptr<AdminLoginHub> AdminLoginHub_;
-    std::shared_ptr<RegistrationHandler> registrationHandler_;
+    std::shared_ptr<IRegistrationHandler> registrationHandler_;
     std::shared_ptr<DatabaseController> databaseController_;
     std::istream& inputStream_;
 };

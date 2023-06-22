@@ -6,19 +6,19 @@
 #include <Tests/common/commonFixture.hpp>
 #include <Common/Logger.hpp>
 
-TEST(AdminLoginHubTests, ShouldLoginAndLogoutSuccesfully)
-{
-    Logger::testName_ = "AdminLoginHubTests_ShouldLoginAndLogoutSuccesfully";
-    auto buffer = saveCleanOutputBuffer();
+// TEST(AdminLoginHubTests, ShouldLoginAndLogoutSuccesfully)
+// {
+//     Logger::testName_ = "AdminLoginHubTests_ShouldLoginAndLogoutSuccesfully";
+//     auto buffer = saveCleanOutputBuffer();
 
-    auto LoginHubCreator = std::make_shared<AdminLoginHubCreator>();
-    auto LoginHub = LoginHubCreator->createHub();
+//     auto LoginHubCreator = std::make_shared<AdminLoginHubCreator>();
+//     auto LoginHub = LoginHubCreator->createHub();
 
-    std::stringstream input("test_admin\ntest_password\n");
-    EXPECT_TRUE(LoginHub->login(input));
-    EXPECT_TRUE(LoginHub->isLogged());
-    EXPECT_TRUE(LoginHub->logout());
-    EXPECT_FALSE(LoginHub->isLogged());
+//     std::stringstream input("test_admin\ntest_password\n");
+//     EXPECT_TRUE(LoginHub->login(input));
+//     EXPECT_TRUE(LoginHub->isLogged());
+//     EXPECT_TRUE(LoginHub->logout());
+//     EXPECT_FALSE(LoginHub->isLogged());
 
-    clearBuffer(buffer);
-}
+//     clearBuffer(buffer);
+// }

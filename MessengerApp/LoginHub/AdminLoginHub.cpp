@@ -5,7 +5,7 @@
 
 AdminLoginHub::AdminLoginHub() : logger_("AdminLoginHub") {}
 
-bool AdminLoginHub::login(std::istream& stdInput)
+bool AdminLoginHub::login(std::istream& stdInput, const std::shared_ptr<IRegistrationHandler>& registrationHandlerPtr)
 {
     logger_.log(Severity::info, "Logging to the Admin account");
     loginDataPtr_ = std::move(helpers::login(stdInput));

@@ -2,6 +2,7 @@ add_custom_target(MessengerInterfaces_HEADERS SOURCES
     ILoginHubFactory.hpp
     ILoginHub.hpp
     IDatabaseController.hpp
+    IRegistrationHandler.hpp
 )
 
 add_library(MessengerInterfaces INTERFACE)

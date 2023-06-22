@@ -38,7 +38,7 @@ link_directories(${OPENSSL_LIBRARY_DIR})
 add_library(${TARGET_NAME} STATIC ${MESSENGER_APP_SOURCES} ${MESSENGER_APP_HEADERS})
 target_link_libraries(${TARGET_NAME}
     MessengerInterfaces
-    ${OPENSSL_LIBRARIES}
+    ${OPENSSL_CRYPTO_LIBRARY}
 )
 
 enable_testing()

@@ -1,18 +1,29 @@
 #include "UserLoginHub.hpp"
 #include <Helpers/LoginHubHelper.hpp>
+#include <Registration/RegistrationHandler.hpp>
 
 UserLoginHub::UserLoginHub() : logger_("UserLoginHub") {}
 
-bool UserLoginHub::login(std::istream& stdInput)
+bool UserLoginHub::login(std::istream& stdInput, const std::shared_ptr<IRegistrationHandler>& registrationHandler)
 {
     logger_.log(Severity::info, "Logging to the User account");
     loginDataPtr_ = std::move(helpers::login(stdInput));
-    if (!setStatus(loginStatus::Logged))
+    auto registeredUsersData = registrationHandler->getUsersData();
+    registrationHandler->saveUserDataForLoginAuthentication(loginDataPtr_->getLogin(), loginDataPtr_->getPassword());
+    if (registrationHandler->isUserAlreadyRegistered(registeredUsersData))
     {
-        logger_.log(Severity::warning, "Login unsuccessful");
-        return false;
+        if (helpers::checkUserCredentials(loginDataPtr_->getLogin(), loginDataPtr_->getPassword(), registeredUsersData))
+        {
+            if (!setStatus(loginStatus::Logged))
+            {
+                logger_.log(Severity::warning, "Login unsuccessful");
+                return false;
+            }
+            logger_.log(Severity::info, "Login Successful");
+            return true;
+        }
     }
-    return true;
+    return false;
 }
 
 bool UserLoginHub::logout()

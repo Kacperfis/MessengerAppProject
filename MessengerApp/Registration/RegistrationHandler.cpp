@@ -11,10 +11,15 @@ bool RegistrationHandler::registrationTrigger()
     return registerUser();
 }
 
-bool RegistrationHandler::registerUser()
+std::map<std::string, std::string> RegistrationHandler::getUsersData()
 {
     databaseController_->LoadDatabase();
-    auto registeredUsersData = databaseController_->getRegisteredUsersData();
+    return databaseController_->getRegisteredUsersData();
+}
+
+bool RegistrationHandler::registerUser()
+{
+    auto registeredUsersData = getUsersData();
     if (!isUserAlreadyRegistered(registeredUsersData))
     {
         databaseController_->registerUser(login_, password_);
@@ -35,4 +40,10 @@ bool RegistrationHandler::isUserAlreadyRegistered(const std::map<std::string, st
         return true;
     }
     return false;
+}
+
+void RegistrationHandler::saveUserDataForLoginAuthentication(const std::string& login, const std::string& password)
+{
+    login_ = login;
+    password_ = password;
 }
