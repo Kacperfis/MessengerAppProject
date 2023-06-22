@@ -31,14 +31,19 @@ set(MESSENGER_APP_HEADERS
     Database/DatabaseController.hpp
 )
 
+find_package(Boost REQUIRED)
 find_package(OpenSSL REQUIRED)
+
 include_directories(${OPENSSL_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIRS})
+
 link_directories(${OPENSSL_LIBRARY_DIR})
 
 add_library(${TARGET_NAME} STATIC ${MESSENGER_APP_SOURCES} ${MESSENGER_APP_HEADERS})
 target_link_libraries(${TARGET_NAME}
     MessengerInterfaces
     ${OPENSSL_CRYPTO_LIBRARY}
+    Boost::boost
 )
 
 enable_testing()
