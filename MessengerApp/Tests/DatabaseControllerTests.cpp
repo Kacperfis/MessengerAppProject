@@ -8,26 +8,30 @@
 TEST(databaseControllerTests, shouldLoadDataFromDatabaseSuccesfully)
 {
     Logger::testName_ = "databaseControllerTests_shouldLoadDataFromDatabaseSuccesfully";
-    const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/testLoadDatabase.txt";
+    const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/databaseControllerDB1/";
     auto databaseController = std::make_shared<DatabaseController>(path);
     databaseController->LoadDatabase();
-    EXPECT_EQ(databaseController->getRegisteredUsersData().size(), 2);
+    EXPECT_EQ(databaseController->getRegisteredUsersData().size(), 1);
 }
 
 TEST(databaseControllerTests, shouldRegisterUserSavingDataToDatabase)
 {
     Logger::testName_ = "databaseControllerTests_shouldRegisterUserSavingDataToDatabase";
-    const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/testSaveDatabase.txt";
+    const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/databaseControllerDB2/";
     auto databaseController = std::make_shared<DatabaseController>(path);
     auto login = "userLogin123";
     auto password = "userPassword123";
+
     databaseController->LoadDatabase();
     EXPECT_EQ(databaseController->getRegisteredUsersData().size(), 0);
+
     databaseController->registerUser(login, password);
     databaseController->LoadDatabase();
     const auto& data = databaseController->getRegisteredUsersData();
     EXPECT_EQ(data.size(), 1);
     EXPECT_EQ(data.begin()->first, "userLogin123");
-    EXPECT_EQ(data.begin()->second, "userPassword123\n");
-    clearFile(path);
+    EXPECT_EQ(data.begin()->second, "userPassword123");
+
+    clearAllFilesFromFolder(path);
+    setDefaultValueForIndexFile("/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/databaseControllerDB2/", "0");
 }

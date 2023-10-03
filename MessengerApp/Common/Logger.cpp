@@ -4,7 +4,11 @@ std::string Logger::testName_ = "defaultTestName";
 
 Logger::Logger(const std::string& prefix) : prefix_(prefix)
 {
-    file_.open("ut_logs/" + testName_ + ".log", std::ios::trunc);
+    file_.open("/workspaces/MessengerAppProject/build/ut_logs/" + testName_ + ".log", std::ios::trunc);
+    if (!file_.is_open())
+    {
+        std::cerr << "Unable to open logs file" << std::endl;
+    }
 }
 
 Logger::~Logger()

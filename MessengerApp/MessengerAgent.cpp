@@ -27,8 +27,9 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
             auto loginResult = userLoginHub_->login(inputStream_, registrationHandler_);
             if (loginResult)
             {
-                ///
+                std::cout << "successfully logged in" << std::endl;
             }
+            else std::cout << "logging failed!" << std::endl;
             break;
         }
     }

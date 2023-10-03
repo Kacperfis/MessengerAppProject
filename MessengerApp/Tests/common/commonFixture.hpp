@@ -13,5 +13,7 @@ private:
 };
 
 void clearFile(const std::string& path);
+void clearAllFilesFromFolder(const std::string& folderPath);
+void setDefaultValueForIndexFile(const std::string& filePath, const std::string& value);
 std::streambuf* saveCleanOutputBuffer();
 void clearBuffer(std::streambuf* oldBuffer);
