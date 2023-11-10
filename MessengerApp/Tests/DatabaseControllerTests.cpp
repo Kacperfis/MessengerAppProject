@@ -1,14 +1,16 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include <cstdlib>
+#include <filesystem>
 
 #include <Database/DatabaseController.hpp>
 #include <Tests/common/commonFixture.hpp>
+#include <Common/Config/pathConfig.hpp>
 
 TEST(databaseControllerTests, shouldLoadDataFromDatabaseSuccesfully)
 {
     Logger::testName_ = "databaseControllerTests_shouldLoadDataFromDatabaseSuccesfully";
-    const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/databaseControllerDB1/";
+    const std::string path = config::path::pathPrefix + "MessengerApp/Tests/testDatabases/databaseControllerDB1/";
     auto databaseController = std::make_shared<DatabaseController>(path);
     databaseController->LoadDatabase();
     EXPECT_EQ(databaseController->getRegisteredUsersData().size(), 1);
@@ -17,7 +19,7 @@ TEST(databaseControllerTests, shouldLoadDataFromDatabaseSuccesfully)
 TEST(databaseControllerTests, shouldRegisterUserSavingDataToDatabase)
 {
     Logger::testName_ = "databaseControllerTests_shouldRegisterUserSavingDataToDatabase";
-    const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/databaseControllerDB2/";
+    const std::string path = config::path::pathPrefix + "MessengerApp/Tests/testDatabases/databaseControllerDB2/";
     auto databaseController = std::make_shared<DatabaseController>(path);
     auto login = "userLogin123";
     auto password = "userPassword123";
@@ -33,5 +35,5 @@ TEST(databaseControllerTests, shouldRegisterUserSavingDataToDatabase)
     EXPECT_EQ(data.begin()->second, "userPassword123");
 
     clearAllFilesFromFolder(path);
-    setDefaultValueForIndexFile("/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/databaseControllerDB2/", "0");
+    setDefaultValueForIndexFile(config::path::pathPrefix + "MessengerApp/Tests/testDatabases/databaseControllerDB2/", "0");
 }

@@ -3,13 +3,14 @@
 
 #include <Encryption/EncryptionManager.hpp>
 #include <Tests/common/commonFixture.hpp>
+#include <Common/Config/pathConfig.hpp>
 
 TEST(EncryptionManagerTests, shouldEncryptAndDecryptTheMessageSuccesfully)
 {
     Logger::testName_ = "EncryptionManagerTests_shouldEncryptAndDecryptTheMessageSuccesfully";
     const std::string key = "0123456789abcdef0123456789abcdef";
     const std::string iv = "0123456789abcdef";
-    const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/encryptionManagerDB/";
+    const std::string path = config::path::pathPrefix + "MessengerApp/Tests/testDatabases/encryptionManagerDB/";
     auto encryptionManagerPtr = std::make_shared<EncryptionManager>(path, key, iv);
 
     const std::string login = "UserLogin";
@@ -27,7 +28,7 @@ TEST(EncryptionManagerTests, shouldEncryptTheDataSaveItToFileAndDecryptFromFileS
     Logger::testName_ = "EncryptionManagerTests_shouldEncryptTheDataSaveItToFileAndDecryptFromFileSuccesfully";
     const std::string key = "0123456789abcdef0123456789abcdef";
     const std::string iv = "0123456789abcdef";
-    const std::string path = "/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/encryptionManagerDB/";
+    const std::string path = config::path::pathPrefix + "MessengerApp/Tests/testDatabases/encryptionManagerDB/";
 
     auto encryptionManagerPtr = std::make_shared<EncryptionManager>(path, key, iv);
     const std::string login = "UserLoginsasdsadsankJklsdajfkljsaldkjasAJKSDJSALKDJSALKDJ1232132131";
@@ -44,5 +45,5 @@ TEST(EncryptionManagerTests, shouldEncryptTheDataSaveItToFileAndDecryptFromFileS
     EXPECT_EQ(resultVec[1], login2 + "|" + password2);
 
     clearAllFilesFromFolder(path);
-    setDefaultValueForIndexFile("/workspaces/MessengerAppProject/MessengerApp/Tests/testDatabases/encryptionManagerDB/", "0");
+    setDefaultValueForIndexFile(config::path::pathPrefix + "MessengerApp/Tests/testDatabases/encryptionManagerDB/", "0");
 }

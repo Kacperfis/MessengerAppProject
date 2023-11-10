@@ -2,8 +2,8 @@
 
 Session::Session(boost::asio::ip::tcp::socket socket, std::map<std::string, std::shared_ptr<Session>>& sessions)
     : socket_(std::move(socket))
-    , activeSessions_(sessions)
-    , logger_("Session") {}
+    , activeSessions_(sessions) {}
+
 
 void Session::start()
 {
@@ -27,47 +27,55 @@ void Session::receive() {
                 std::getline(iss, recipient, '|');
                 std::getline(iss, content, '|');
 
-                if (type == "CONNECT")
+                if (type == "ESTABLISH")
                 {
-                    logger_.log(Severity::info, "successfully established session with " + sender);
+                    std::cout << "successfully established session with " + sender << std::endl;
                     username_ = sender;
                     activeSessions_[username_] = self;
                 } 
-                else if (type == "DISCONNECT")
+                else if (type == "RELINQUISH")
                 {
-                    logger_.log(Severity::info, "successfully closed session with " + sender);
+                    std::cout << "successfully closed session with " + sender << std::endl;
                     activeSessions_.erase(username_);
                 }
                 else if (type == "MESSAGE")
                 {
+                    std::cout << "Current active sessions: ";
+                    for (const auto& pair : activeSessions_) {
+                        std::cout << pair.first << " ";
+                    }
+                    std::cout << std::endl;
+
                     auto recipientSession = activeSessions_.find(recipient);
                     if (recipientSession != activeSessions_.end()) 
                     {
-                        logger_.log(Severity::info, "got message from " + sender + ", forwarding message to " + recipient);
+                        std::cout << "got message from " + sender + ", forwarding message to " + recipient << std::endl;
                         std::string forwardMessage = "MESSAGE|" + sender + "|" + recipient + "|" + content;
                         recipientSession->second->send(forwardMessage);
                     }
-                    logger_.log(Severity::warning, "got message from " + sender + ", but recipient: " + recipient + " is offline");
+                    else std::cout << "got message from " + sender + ", but recipient: " + recipient + " is offline" << std::endl;
                 }
-                logger_.log(Severity::warning, "received unknown protocol message, start retrying... ");
+                else std::cout << "received unknown protocol message, start retrying... " << std::endl;
                 receive();
             } 
             else 
             {
-                logger_.log(Severity::warning, "connection lost");
+                std::cout << "connection lost" << std::endl;
                 activeSessions_.erase(username_);
             }
         });
 }
 
-void Session::send(const std::string& data)
-{
+void Session::send(const std::string& data) {
+    std::cout << "About to send to " << username_ << ": " << data << std::endl;
+
     auto self(shared_from_this());
-    std::string response = "Hello, client! This is a custom response from the server.";
-    boost::asio::async_write(socket_, boost::asio::buffer(response),
-        [this, self](boost::system::error_code ec, std::size_t length) {
-            if (!ec) {
-                receive();
+    boost::asio::async_write(socket_, boost::asio::buffer(data + "\n"),
+        [this, self, data](boost::system::error_code errorCode, std::size_t length) {
+            if (errorCode) {
+                std::cerr << "Error sending to " << username_ << ": " << errorCode.message() << std::endl;
+            } else {
+                std::cout << "Sent " << length << " bytes to " << username_ << ": " << data << std::endl;
             }
         });
 }

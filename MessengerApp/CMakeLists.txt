@@ -3,10 +3,11 @@ set(TARGET_NAME MessengerApp)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(MESSENGER_APP_SOURCES
-    #main.cpp
+    #main.cpp # uncomment to create the binary
     Common/Logger.cpp
-    Connection/Client.cpp
-    Connection/Server.cpp
+    Connection/Client/Client.cpp
+    Connection/Server/Server.cpp
+    Connection/Server/Session.cpp
     MessengerAgent.cpp
     LoginHub/AdminLoginHub.cpp
     LoginHub/UserLoginHub.cpp
@@ -20,8 +21,10 @@ set(MESSENGER_APP_SOURCES
 )
 set(MESSENGER_APP_HEADERS
     Common/Logger.hpp
-    Connection/Client.hpp
-    Connection/Server.hpp
+    Common/Config/pathConfig.hpp
+    Connection/Client/Client.hpp
+    Connection/Server/Server.hpp
+    Connection/Server/Session.hpp
     MessengerAgent.hpp
     LoginHub/AdminLoginHub.hpp
     LoginHub/UserLoginHub.hpp
@@ -64,6 +67,7 @@ set(UT_DRIVER ut)
 add_executable(${UT_DRIVER} ${TEST_SOURCES})
 target_link_libraries(${UT_DRIVER} ${TARGET_NAME} gmock_main gtest gmock)
 
+# uncomment to create the binary
 # add_executable(${TARGET_NAME}_exec main.cpp)
 # target_link_libraries(${TARGET_NAME}_exec ${TARGET_NAME})
 

@@ -8,6 +8,8 @@
 #include <LoginHub/UserLoginHub.hpp>
 #include <Registration/RegistrationHandler.hpp>
 #include <Database/DatabaseController.hpp>
+#include <Connection/Server/Server.hpp>
+#include <Connection/Client/Client.hpp>
 
 class MessengerAgent
 {
@@ -19,4 +21,7 @@ private:
     std::shared_ptr<IRegistrationHandler> registrationHandler_;
     std::shared_ptr<DatabaseController> databaseController_;
     std::istream& inputStream_;
+
+    std::shared_ptr<Server> server_;
+    std::shared_ptr<Client> client_;
 };

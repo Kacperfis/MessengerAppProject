@@ -1,8 +1,7 @@
 #include "Server.hpp"
 
 Server::Server()
-    : acceptor_(ioContext_,boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 8080))
-    , logger_("Server") {}
+    : acceptor_(ioContext_, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 8080)) {}
 
 void Server::acceptConnection()
 {

@@ -1,7 +1,8 @@
 #include <MessengerAgent.hpp>
+#include <Common/Config/pathConfig.hpp>
 
 int main()
 {
-    MessengerAgent("/workspaces/MessengerAppProject/MessengerApp/Database/RegisteredUserData/", std::cin);
+    MessengerAgent(config::path::pathPrefix + "MessengerApp/Database/RegisteredUserData/", std::cin);
     return 0;
 }

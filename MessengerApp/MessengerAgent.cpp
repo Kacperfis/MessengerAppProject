@@ -28,6 +28,7 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
             }
             case 2:
             {
+                std::cout << "enter your login and password" << std::endl;
                 auto loginResult = userLoginHub_->login(inputStream_, registrationHandler_);
                 if (loginResult)
                 {
@@ -41,11 +42,33 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
                     {
                         case 1: //client
                         {
-                            break;
+                            client_ = std::make_shared<Client>();
+                            client_->connect("127.0.0.1", "8080");
+                            std::thread ioThread([this] { client_->run(); }); // Run io_context in a separate thread
+
+                            std::string username;
+                            std::cout << "Enter your username: ";
+                            std::cin >> username;
+                            client_->login(username);
+                            std::string recipient, message;
+                            std::cout << std::endl;
+                            std::cout << "Enter recipient (or 'exit' to logout): ";
+                            std::cin >> recipient;
+                            while (true)
+                            {
+                                std::cout << "Enter your message: ";
+
+                                std::cin.ignore();
+                                std::getline(std::cin, message);
+                                client_->sendMessage(username, recipient, message);
+                            }
+
+                            ioThread.join(); // Wait for the io_context thread to finish
                         }
                         case 2: //server
                         {
-                            break;
+                            server_ = std::make_shared<Server>();
+                            server_->start();
                         }
                         default:
                         {
