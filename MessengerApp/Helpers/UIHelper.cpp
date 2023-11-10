@@ -12,7 +12,7 @@ void showEntryPage()
     std::cout << "==============Welcome in Messenger==============" << std::endl;
     std::cout << "1. Registration" << std::endl;
     std::cout << "2. Login(user)" << std::endl;
-    std::cout << "3. Login(admin)" << std::endl;
+    std::cout << "3. Exit" << std::endl;
 }
 void showRegistrationForm(std::string& login, std::string& password, std::istream& stdInput)
 {
@@ -21,6 +21,13 @@ void showRegistrationForm(std::string& login, std::string& password, std::istrea
     stdInput >> login;
     std::cout << "type your password: " << std::endl;
     stdInput >> password;
+}
+
+void showServerOrClientChoiceForm()
+{
+    std::cout << "choose the option: " << std::endl;
+    std::cout << "1. Client" << std::endl;
+    std::cout << "2. Server" << std::endl;
 }
 
 void userAlreadyRegisteredMessage()

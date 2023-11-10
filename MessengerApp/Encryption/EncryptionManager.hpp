@@ -18,12 +18,12 @@ public:
     void encryptDataAndSaveToUsersDatabase(const std::string& login, const std::string& password);
     const std::vector<std::string> decryptDataFromUsersDatabase();
 
-    const std::string encryptString(const std::string& plaintext, const std::string& key, const std::string& iv);
-    const std::string decryptString(const std::string& ciphertext, const std::string& key, const std::string& iv);
+    const std::string encryptString(const std::string& plaintext);
+    const std::string decryptString(const std::string& ciphertext);
 
+private:
     std::string getCurrentFileIndex(const std::string& path);
     void updateCurrentFileIndex(const std::string& path, const int& currentIndex);
-private:
 
     const std::string path_;
     const std::string key_;

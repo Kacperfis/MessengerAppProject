@@ -5,6 +5,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 set(MESSENGER_APP_SOURCES
     #main.cpp
     Common/Logger.cpp
+    Connection/Client.cpp
+    Connection/Server.cpp
     MessengerAgent.cpp
     LoginHub/AdminLoginHub.cpp
     LoginHub/UserLoginHub.cpp
@@ -18,6 +20,8 @@ set(MESSENGER_APP_SOURCES
 )
 set(MESSENGER_APP_HEADERS
     Common/Logger.hpp
+    Connection/Client.hpp
+    Connection/Server.hpp
     MessengerAgent.hpp
     LoginHub/AdminLoginHub.hpp
     LoginHub/UserLoginHub.hpp

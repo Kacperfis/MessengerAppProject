@@ -10,27 +10,64 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
     inputStream_(inputStream)
 {
     registrationHandler_ = std::make_shared<RegistrationHandler>(databaseController_, inputStream_);
-    helpers::showEntryPage();
-    int choice;
-    inputStream_ >> choice;
-    switch (choice)
+
+    bool retryToMainWindow = true;
+    while (retryToMainWindow)
     {
-        case 1:
+        helpers::showEntryPage();
+        int choice;
+        inputStream_ >> choice;
+        switch (choice)
         {
-            auto registrationResult = registrationHandler_->registrationTrigger();
-            if (registrationResult) helpers::userSuccessfullyRegisteredMessage();
-            else helpers::userAlreadyRegisteredMessage();
-            break;
-        }
-        case 2:
-        {
-            auto loginResult = userLoginHub_->login(inputStream_, registrationHandler_);
-            if (loginResult)
+            case 1:
             {
-                std::cout << "successfully logged in" << std::endl;
+                auto registrationResult = registrationHandler_->registrationTrigger();
+                if (registrationResult) helpers::userSuccessfullyRegisteredMessage();
+                else helpers::userAlreadyRegisteredMessage();
+                break;
             }
-            else std::cout << "logging failed!" << std::endl;
-            break;
+            case 2:
+            {
+                auto loginResult = userLoginHub_->login(inputStream_, registrationHandler_);
+                if (loginResult)
+                {
+                    std::cout << "successfully logged in" << std::endl;
+                    retryToMainWindow = false;
+
+                    helpers::showServerOrClientChoiceForm();
+                    int serviceChoice;
+                    inputStream_ >> serviceChoice;
+                    switch (serviceChoice)
+                    {
+                        case 1: //client
+                        {
+                            break;
+                        }
+                        case 2: //server
+                        {
+                            break;
+                        }
+                        default:
+                        {
+                            std::cerr << "Invalid choice, please try again" << std::endl;
+                            break;
+                        }
+                    }
+                }
+                else std::cout << "logging failed!" << std::endl;
+                break;
+            }
+            case 3:
+            {
+                std::cout << "Exiting application..." << std::endl;
+                retryToMainWindow = false;
+                break;
+            }
+            default:
+            {
+                std::cerr << "Invalid choice, please try again" << std::endl;
+                break;
+            }
         }
     }
 }

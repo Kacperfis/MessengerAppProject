@@ -5,8 +5,8 @@ EncryptionManager::EncryptionManager(const std::string& path, const std::string&
 
 void EncryptionManager::encryptDataAndSaveToUsersDatabase(const std::string& login, const std::string& password)
 {
-    std::string plaintext = login + "|" + password;
-    std::string ciphertext = encryptString(plaintext, key_, iv_);
+    auto plaintext = login + "|" + password;
+    auto ciphertext = encryptString(plaintext);
     auto currentIndex = std::stoi(getCurrentFileIndex(path_)) + 1;
     std::ofstream file(path_ + "data" + std::to_string(currentIndex) + ".txt", std::ios::binary | std::ios::app);
 
@@ -28,7 +28,8 @@ const std::vector<std::string> EncryptionManager::decryptDataFromUsersDatabase()
     for (int counter = 1; counter <= currentNumberOfFiles; counter++)
     {
         std::ifstream infile(path_ + "data" + std::to_string(counter) + ".txt", std::ios::in | std::ios::binary);
-        if (!infile.is_open()) {
+        if (!infile.is_open())
+        {
             logger_.log(Severity::error, "Failed to open file: " + path_ + "data" + std::to_string(counter));
             return {};
         }
@@ -38,14 +39,14 @@ const std::vector<std::string> EncryptionManager::decryptDataFromUsersDatabase()
         infile.seekg(0, std::ios::beg);
 
         std::vector<char> buffer(size);
-        if (!infile.read(buffer.data(), size)) {
+        if (!infile.read(buffer.data(), size))
+        {
             logger_.log(Severity::error, "Error reading from the file");
             return {};
         }
 
         std::string ciphertext(buffer.begin(), buffer.end());
-        std::string decrypted = decryptString(ciphertext, key_, iv_);
-        decryptedContent.push_back(decrypted);
+        decryptedContent.push_back(decryptString(ciphertext));
 
         infile.close();
     }
@@ -83,38 +84,38 @@ void EncryptionManager::updateCurrentFileIndex(const std::string& path, const in
     else logger_.log(Severity::error, "Error opening index file to update");
 }
 
-const std::string EncryptionManager::encryptString(const std::string& plaintext, const std::string& key, const std::string& iv)
+const std::string EncryptionManager::encryptString(const std::string& plaintext)
 {
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
-    EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, (unsigned char*)key.c_str(), (unsigned char*)iv.c_str());
+    auto charTypeKey = reinterpret_cast<const unsigned char*>(key_.c_str());
+    auto charTypeIv = reinterpret_cast<const unsigned char*>(iv_.c_str());
+    auto charTypePlaintext = reinterpret_cast<const unsigned char*>(plaintext.c_str());
 
-    int ciphertext_len = plaintext.length() + EVP_MAX_BLOCK_LENGTH;
-    unsigned char* ciphertext = new unsigned char[ciphertext_len];
-    int len;
-    EVP_EncryptUpdate(ctx, ciphertext, &len, (unsigned char*)plaintext.c_str(), plaintext.length());
-    int final_len;
-    EVP_EncryptFinal_ex(ctx, ciphertext + len, &final_len);
+    auto ciphertext = std::make_unique<unsigned char[]>(plaintext.length() + EVP_MAX_BLOCK_LENGTH);
+    auto length = std::make_unique<int>(), finalLength = std::make_unique<int>();
+
+    EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, charTypeKey, charTypeIv);
+    EVP_EncryptUpdate(ctx, ciphertext.get(), length.get(), charTypePlaintext, plaintext.length());
+    EVP_EncryptFinal_ex(ctx, ciphertext.get() + *length, finalLength.get());
     EVP_CIPHER_CTX_free(ctx);
 
-    std::string result(reinterpret_cast<char*>(ciphertext), len + final_len); // construct the string using the full size
-    delete[] ciphertext;
-    return result;
+    return std::string(reinterpret_cast<char*>(ciphertext.get()), *length + *finalLength);
 }
 
-const std::string EncryptionManager::decryptString(const std::string& ciphertext, const std::string& key, const std::string& iv)
+const std::string EncryptionManager::decryptString(const std::string& ciphertext)
 {
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
-    EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, (unsigned char*)key.c_str(), (unsigned char*)iv.c_str());
+    auto charTypeKey = reinterpret_cast<const unsigned char*>(key_.c_str());
+    auto charTypeIv = reinterpret_cast<const unsigned char*>(iv_.c_str());
+    auto charTypeCiphertext = reinterpret_cast<const unsigned char*>(ciphertext.data());
 
-    int plaintext_len = ciphertext.length() + EVP_MAX_BLOCK_LENGTH;
-    unsigned char* plaintext = new unsigned char[plaintext_len];
-    int len;
-    EVP_DecryptUpdate(ctx, plaintext, &len, (unsigned char*)ciphertext.data(), ciphertext.length());
-    int final_len;
-    EVP_DecryptFinal_ex(ctx, plaintext + len, &final_len);
+    auto plaintext = std::make_unique<unsigned char[]>(ciphertext.length() + EVP_MAX_BLOCK_LENGTH);
+    auto lentgh = std::make_unique<int>(), finalLength = std::make_unique<int>();
+
+    EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, charTypeKey, charTypeIv);
+    EVP_DecryptUpdate(ctx, plaintext.get(), lentgh.get(), charTypeCiphertext, ciphertext.length());
+    EVP_DecryptFinal_ex(ctx, plaintext.get() + *lentgh, finalLength.get());
     EVP_CIPHER_CTX_free(ctx);
 
-    std::string result(reinterpret_cast<char*>(plaintext), len + final_len); // construct the string using the full size
-    delete[] plaintext;
-    return result;
+    return std::string(reinterpret_cast<char*>(plaintext.get()), *lentgh + *finalLength);
 }

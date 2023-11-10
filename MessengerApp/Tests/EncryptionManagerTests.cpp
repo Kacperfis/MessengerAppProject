@@ -16,8 +16,8 @@ TEST(EncryptionManagerTests, shouldEncryptAndDecryptTheMessageSuccesfully)
     const std::string password = "UserPassword";
     const std::string text = login + "|" + password;
 
-    auto encryptedMessage = encryptionManagerPtr->encryptString(text, key, iv);
-    auto decryptedMessage = encryptionManagerPtr->decryptString(encryptedMessage, key, iv);
+    auto encryptedMessage = encryptionManagerPtr->encryptString(text);
+    auto decryptedMessage = encryptionManagerPtr->decryptString(encryptedMessage);
 
     EXPECT_EQ(decryptedMessage, text);
 }
