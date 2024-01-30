@@ -9,7 +9,8 @@ namespace connection::helpers::message
 
 void MessageHandler::handleMessage(const Message& message) noexcept
 {
-    std::cout << "MESSAGE TYPE: " << toString(message.messageType) << std::endl;
+    Logger logger("MessageHandler");
+    logger.log(Severity::info, "handling message with messageType: " + toString(message.messageType));
     switch (message.messageType)
     {
         case MessageType::CHECK_AVAILABILITY:
@@ -43,7 +44,7 @@ void MessageHandler::handleCheckAvailabilityMessage(const Message& message) noex
 
 void MessageHandler::handleStandardMessage(const Message& message) noexcept
 {
-    std::cout << "message [" << message.sender << "]: " << message.content << std::endl; 
+    std::cout << "[" << message.sender << "]: " << message.content << std::endl; 
 }
 
 } // namespace connection::helpers::message

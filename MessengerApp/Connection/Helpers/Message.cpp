@@ -56,3 +56,4 @@ std::string toString(const MessageType messageType)
 }
 
 } // namespace connection::helpers::message
+

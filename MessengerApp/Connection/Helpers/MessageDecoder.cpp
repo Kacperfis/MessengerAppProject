@@ -22,10 +22,7 @@ Message MessageDecoder::decodeMessage(const std::string& message) noexcept
             messageData.push_back(currentData);
             currentData = "";
         }
-        else
-        {
-            currentData += message[i];
-        }
+        else currentData += message[i]; 
     }
     if (!currentData.empty()) messageData.push_back(currentData);
     

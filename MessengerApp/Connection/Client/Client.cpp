@@ -9,9 +9,7 @@
 namespace connection::client
 {
 
-Client::Client() : socket_(io_context_), resolver_(io_context_)
-{
-}
+Client::Client() : socket_(io_context_), resolver_(io_context_), logger_("Client") {}
 
 void Client::connect(const std::string& host, const std::string& port)
 {
@@ -27,22 +25,22 @@ void Client::readData()
         {
             if (!errorCode)
             {
-                std::cout << "[Client] Data received: " << length << " bytes." << std::endl;
+                logger_.log(Severity::info, "received " + std::to_string(length) + " bytes of data");
                 std::string message(data_.substr(0, length));
-                std::cout << "[Client] Message received: " << message << std::endl;
+
+                logger_.log(Severity::info, "received message: " + message);
                 auto decodedMessage = helpers::message::MessageDecoder::decodeMessage(message);
-                std::cout << decodedMessage << std::endl;
                 helpers::message::MessageHandler::handleMessage(decodedMessage);
                 data_.erase(0, length);
                 readData();
             }
             else if (errorCode == boost::asio::error::operation_aborted)
             {
-                std::cout << "[Client] Read operation was canceled." << std::endl;
+                logger_.log(Severity::warning, "read operation was cancelled");
             }
             else
             {
-                std::cerr << "[Client] Read failed: " << errorCode.message() << std::endl;
+                logger_.log(Severity::warning, "read operation failed with error: " + errorCode.message());
             }
         }
     );
@@ -50,7 +48,7 @@ void Client::readData()
 
 void Client::sendData(const std::string& data)
 {
-    std::cout << "Sending: " << data << std::endl;
+    logger_.log(Severity::info, "sending " + data);
     boost::asio::write(socket_, boost::asio::buffer(data + "\n"));
 }
 
@@ -71,6 +69,7 @@ void Client::logout(const std::string& sender)
 
 void Client::run()
 {
+    logger_.log(Severity::info, "client started");
     std::lock_guard<std::mutex> lockGuard(mtx_);
     while (socket_.is_open() && !io_context_.stopped())
     {
@@ -87,11 +86,12 @@ void Client::stop()
 {
     if (socket_.is_open())
     {
-        boost::system::error_code ec;
-        socket_.close(ec);
-        if (ec)
+        boost::system::error_code errorCode;
+        socket_.close(errorCode);
+        if (errorCode)
         {
-            std::cerr << "Error on socket close during disconnect: " << ec.message() << std::endl;
+            logger_.log(Severity::error, "Error on socket close during disconnect: " + errorCode.message());
+            std::cerr << "Error on socket close during disconnect: " << errorCode.message() << std::endl;
         }
     }
 }

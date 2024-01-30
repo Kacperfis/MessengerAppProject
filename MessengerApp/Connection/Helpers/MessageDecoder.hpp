@@ -7,7 +7,7 @@
 namespace connection::helpers::message
 {
 
-class MessageDecoder
+class MessageDecoder final
 {
 public:
     static Message decodeMessage(const std::string& message) noexcept;

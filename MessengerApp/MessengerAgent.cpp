@@ -50,11 +50,11 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
                             client_->login(username);
                             std::string recipient, message;
                             std::cout << std::endl;
-                            std::cout << "Enter recipient (or 'exit' to logout): ";
+                            std::cout << "Enter recipient (or 'exit' to logout): " << std::endl;
                             std::cin >> recipient;
+                            std::cout << "Enter your message: ";
                             while (true)
                             {
-                                std::cout << "Enter your message: ";
                                 std::getline(std::cin, message);
                                 client_->sendMessage(username, recipient, message);
                             }
@@ -63,7 +63,7 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
                         }
                         case 2: // server
                         {
-                            server_ = std::make_shared<Server>();
+                            server_ = std::make_shared<connection::server::Server>();
                             server_->start();
                         }
                         default:

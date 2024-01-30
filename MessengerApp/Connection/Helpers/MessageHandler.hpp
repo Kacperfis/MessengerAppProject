@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Message.hpp"
+#include "Common/Logger.hpp"
 
 namespace connection::helpers::message
 {
 
-class MessageHandler
+class MessageHandler final
 {
 public:
     static void handleMessage(const Message& message) noexcept;

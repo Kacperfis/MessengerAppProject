@@ -1,13 +1,16 @@
 #pragma once
 
+#include <boost/asio.hpp>
 #include <memory>
 #include <map>
 #include <set>
-#include <vector>
 #include <string> 
 #include <iostream>
 
-#include <boost/asio.hpp>
+#include "Common/Logger.hpp"
+
+namespace connection::session
+{
 
 class Session : public std::enable_shared_from_this<Session>
 {
@@ -20,7 +23,11 @@ private:
     void receive();
 
     std::map<std::string, std::shared_ptr<Session>>& activeSessions_;
-    boost::asio::ip::tcp::socket socket_;
     std::string data_;
-    std::string username_;   
+    std::string username_;
+
+    boost::asio::ip::tcp::socket socket_;
+    Logger logger_;  
 };
+
+} // namespace connection::session

@@ -9,8 +9,6 @@
 #include <algorithm>
 #include <Common/Logger.hpp>
 
-#include <Common/Logger.hpp>
-
 class EncryptionManager
 {
 public:

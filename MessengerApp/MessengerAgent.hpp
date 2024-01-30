@@ -22,6 +22,6 @@ private:
     std::shared_ptr<DatabaseController> databaseController_;
     std::istream& inputStream_;
 
-    std::shared_ptr<Server> server_;
+    std::shared_ptr<connection::server::Server> server_;
     std::shared_ptr<connection::client::Client> client_;
 };

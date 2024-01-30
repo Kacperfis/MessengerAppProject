@@ -1,12 +1,16 @@
 #pragma once
 
+#include <boost/asio.hpp>
 #include <iostream>
 #include <string>
 
 #include "Session.hpp"
-#include <boost/asio.hpp>
+#include "Common/Logger.hpp"
 
-class Server
+namespace connection::server
+{
+
+class Server final
 {
 public:
     Server();
@@ -17,5 +21,8 @@ private:
 
     boost::asio::io_context ioContext_;
     boost::asio::ip::tcp::acceptor acceptor_;
-    std::map<std::string, std::shared_ptr<Session>> activeSessions_;
+    std::map<std::string, std::shared_ptr<session::Session>> activeSessions_;
+    Logger logger_;
 };
+
+} // namespace connection::server
