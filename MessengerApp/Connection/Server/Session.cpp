@@ -32,20 +32,25 @@ void Session::receive() {
                     std::cout << "successfully established session with " + sender << std::endl;
                     username_ = sender;
                     activeSessions_[username_] = self;
+
+                    std::set<std::string> activeUsersSet;
+                    for (const auto& pair : activeSessions_) activeUsersSet.insert(pair.first);
+                    for (const auto& pair : activeSessions_)
+                    {
+                        auto activeUsers = getActiveUsers(activeUsersSet, pair.first);
+                        std::cout << "forwarding check availability message to " + pair.first << std::endl;
+                        std::string forwardMessage = "CHECK_AVAILABILITY|" + sender + "|" + pair.first + "|" + activeUsers;
+                        pair.second->send(forwardMessage);
+                    }
                 } 
                 else if (type == "RELINQUISH")
                 {
                     std::cout << "successfully closed session with " + sender << std::endl;
+                    std::cout << "username_: " << username_ << std::endl;
                     activeSessions_.erase(username_);
                 }
                 else if (type == "MESSAGE")
                 {
-                    std::cout << "Current active sessions: ";
-                    for (const auto& pair : activeSessions_) {
-                        std::cout << pair.first << " ";
-                    }
-                    std::cout << std::endl;
-
                     auto recipientSession = activeSessions_.find(recipient);
                     if (recipientSession != activeSessions_.end()) 
                     {
@@ -58,7 +63,7 @@ void Session::receive() {
                 else std::cout << "received unknown protocol message, start retrying... " << std::endl;
                 receive();
             } 
-            else 
+            else
             {
                 std::cout << "connection lost" << std::endl;
                 activeSessions_.erase(username_);
@@ -66,7 +71,30 @@ void Session::receive() {
         });
 }
 
-void Session::send(const std::string& data) {
+std::string Session::getActiveUsers(const std::set<std::string>& activeUsers, const std::string& username)
+{
+    std::string result;
+    auto activeUsersCopy = activeUsers;
+    auto it = activeUsersCopy.find(username);
+    if (it != activeUsersCopy.end())
+    {
+        activeUsersCopy.erase(it);
+    }
+    for (auto activeUser : activeUsersCopy)
+    {
+        result += activeUser + ",";
+    }
+
+    if (!result.empty() && result.back() == ',')
+    {
+        result.erase(result.length() - 1);
+    }
+
+    return result;
+}
+
+void Session::send(const std::string& data)
+{
     std::cout << "About to send to " << username_ << ": " << data << std::endl;
 
     auto self(shared_from_this());

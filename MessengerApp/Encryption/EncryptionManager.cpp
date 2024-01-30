@@ -59,7 +59,6 @@ std::string EncryptionManager::getCurrentFileIndex(const std::string& path)
 {
     std::string index = "";
     std::ifstream indexFile(path + "dataIndex.txt");
-
     if (indexFile.is_open())
     {
         if (getline(indexFile, index)) logger_.log(Severity::info, "successfully read current index: " + index);

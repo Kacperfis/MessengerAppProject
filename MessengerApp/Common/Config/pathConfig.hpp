@@ -5,6 +5,6 @@
 namespace config::path
 {
 
-const std::string pathPrefix = "/home/kacper/MessengerAppProject/";
+const std::string pathPrefix = "/home/MessengerAppProject/";
 
 } // namespace config::path

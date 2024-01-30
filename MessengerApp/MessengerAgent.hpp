@@ -23,5 +23,5 @@ private:
     std::istream& inputStream_;
 
     std::shared_ptr<Server> server_;
-    std::shared_ptr<Client> client_;
+    std::shared_ptr<connection::client::Client> client_;
 };

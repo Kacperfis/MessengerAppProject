@@ -15,6 +15,7 @@ public:
     bool logout() override;
     bool setStatus(loginStatus) override;
     bool isLogged() override;
+    const std::string getUserLogin() override;
 private:
     bool userLogged_;
     std::unique_ptr<LoginData> loginDataPtr_;

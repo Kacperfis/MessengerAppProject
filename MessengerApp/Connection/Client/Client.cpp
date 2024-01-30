@@ -2,7 +2,16 @@
 #include <iostream>
 #include <thread>
 
-Client::Client() : socket_(io_context_) {}
+#include "Connection/Helpers/Message.hpp"
+#include "Connection/Helpers/MessageDecoder.hpp"
+#include "Connection/Helpers/MessageHandler.hpp"
+
+namespace connection::client
+{
+
+Client::Client() : socket_(io_context_), resolver_(io_context_)
+{
+}
 
 void Client::connect(const std::string& host, const std::string& port)
 {
@@ -21,8 +30,15 @@ void Client::readData()
                 std::cout << "[Client] Data received: " << length << " bytes." << std::endl;
                 std::string message(data_.substr(0, length));
                 std::cout << "[Client] Message received: " << message << std::endl;
-                data_.erase(0, length);  // Clear the processed data
-                readData();  // Initiate another read operation
+                auto decodedMessage = helpers::message::MessageDecoder::decodeMessage(message);
+                std::cout << decodedMessage << std::endl;
+                helpers::message::MessageHandler::handleMessage(decodedMessage);
+                data_.erase(0, length);
+                readData();
+            }
+            else if (errorCode == boost::asio::error::operation_aborted)
+            {
+                std::cout << "[Client] Read operation was canceled." << std::endl;
             }
             else
             {
@@ -48,17 +64,36 @@ void Client::sendMessage(const std::string& sender, const std::string& recipient
     sendData("MESSAGE|" + sender + "|" + recipient + "|" + message);
 }
 
-void Client::logout()
+void Client::logout(const std::string& sender)
 {
-    sendData("RELINQUISH|||");
+    sendData("RELINQUISH|" + sender + "||");
 }
 
 void Client::run()
 {
     std::lock_guard<std::mutex> lockGuard(mtx_);
-    while (socket_.is_open())
+    while (socket_.is_open() && !io_context_.stopped())
     {
         io_context_.restart();
         io_context_.run();
+        if (io_context_.stopped())
+        {
+            break;
+        }
     }
 }
+
+void Client::stop()
+{
+    if (socket_.is_open())
+    {
+        boost::system::error_code ec;
+        socket_.close(ec);
+        if (ec)
+        {
+            std::cerr << "Error on socket close during disconnect: " << ec.message() << std::endl;
+        }
+    }
+}
+
+} // namespace connection::client

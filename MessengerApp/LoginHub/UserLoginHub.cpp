@@ -54,3 +54,8 @@ bool UserLoginHub::setStatus(loginStatus status)
     }
     return true;
 }
+
+const std::string UserLoginHub::getUserLogin()
+{
+    return loginDataPtr_->getLogin();
+}
