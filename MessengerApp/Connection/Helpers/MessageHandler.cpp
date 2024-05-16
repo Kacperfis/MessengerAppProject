@@ -7,7 +7,7 @@
 namespace connection::helpers::message
 {
 
-void MessageHandler::handleMessage(const Message& message) noexcept
+void MessageHandler::handleMessage(const Message& message, const std::shared_ptr<EncryptionManager>& encryptionManager) noexcept
 {
     Logger logger("MessageHandler");
     logger.log(Severity::info, "handling message with messageType: " + toString(message.messageType));
@@ -20,7 +20,7 @@ void MessageHandler::handleMessage(const Message& message) noexcept
         }
         case MessageType::MESSAGE:
         {
-            handleStandardMessage(message);
+            handleStandardMessage(message, encryptionManager);
             break;
         }
     }
@@ -42,9 +42,9 @@ void MessageHandler::handleCheckAvailabilityMessage(const Message& message) noex
     }
 }
 
-void MessageHandler::handleStandardMessage(const Message& message) noexcept
+void MessageHandler::handleStandardMessage(const Message& message, const std::shared_ptr<EncryptionManager>& encryptionManager) noexcept
 {
-    std::cout << "[" << message.sender << "]: " << message.content << std::endl; 
+    std::cout << "[" << message.sender << "]: " << encryptionManager->decryptString(message.content) << std::endl;
 }
 
 } // namespace connection::helpers::message

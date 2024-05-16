@@ -6,6 +6,7 @@ namespace connection::session
 Session::Session(boost::asio::ip::tcp::socket socket, std::map<std::string, std::shared_ptr<Session>>& sessions)
     : socket_(std::move(socket))
     , activeSessions_(sessions)
+    , encryptionManager_(std::make_shared<EncryptionManager>("", "0123456789abcdef0123456789abcdef", "0123456789abcdef"))
     , logger_("Session") {}
 
 
@@ -22,6 +23,7 @@ void Session::receive() {
         if (!errorCode)
         {
             std::string line(data_.substr(0, length - 1));
+            std::cout << "Line: " << line << std::endl;
             data_.erase(0, length);
 
             std::string type, sender, recipient, content;
@@ -114,9 +116,8 @@ void Session::send(const std::string& data)
     logger_.log(Severity::info, "about to send to " + username_ + ": " + data);
     std::cout << "about to send to " << username_ << ": " << data << std::endl;
 
-    auto self = shared_from_this();
     boost::asio::async_write(socket_, boost::asio::buffer(data + "\n"),
-    [this, self, data](boost::system::error_code errorCode, std::size_t length) {
+    [this, data](boost::system::error_code errorCode, std::size_t length) {
         if (errorCode)
         {
             logger_.log(Severity::error, "error sending to " + username_ + ": " + errorCode.message());

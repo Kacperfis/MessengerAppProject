@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <iostream>
+#include <cstdint>
 
 namespace connection::helpers::message
 {

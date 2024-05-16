@@ -9,7 +9,11 @@
 namespace connection::client
 {
 
-Client::Client() : socket_(io_context_), resolver_(io_context_), logger_("Client") {}
+Client::Client() :
+    socket_(io_context_),
+    resolver_(io_context_),
+    encryptionManager_(std::make_shared<EncryptionManager>("", "0123456789abcdef0123456789abcdef", "0123456789abcdef")),
+    logger_("Client") {}
 
 void Client::connect(const std::string& host, const std::string& port)
 {
@@ -30,7 +34,7 @@ void Client::readData()
 
                 logger_.log(Severity::info, "received message: " + message);
                 auto decodedMessage = helpers::message::MessageDecoder::decodeMessage(message);
-                helpers::message::MessageHandler::handleMessage(decodedMessage);
+                helpers::message::MessageHandler::handleMessage(decodedMessage, encryptionManager_);
                 data_.erase(0, length);
                 readData();
             }
@@ -59,7 +63,7 @@ void Client::login(const std::string& username)
 
 void Client::sendMessage(const std::string& sender, const std::string& recipient, const std::string& message)
 {
-    sendData("MESSAGE|" + sender + "|" + recipient + "|" + message);
+    sendData("MESSAGE|" + sender + "|" + recipient + "|" + encryptionManager_->encryptString(message));
 }
 
 void Client::logout(const std::string& sender)

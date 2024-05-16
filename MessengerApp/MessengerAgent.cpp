@@ -59,6 +59,7 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
                                 client_->sendMessage(username, recipient, message);
                             }
 
+
                             ioThread.join(); // Wait for the io_context thread to finish
                         }
                         case 2: // server

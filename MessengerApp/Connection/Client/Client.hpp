@@ -4,6 +4,7 @@
 #include <string>
 #include <thread>
 
+#include <Encryption/EncryptionManager.hpp>
 #include <Common/Logger.hpp>
 
 namespace connection::client
@@ -25,9 +26,12 @@ private:
     void readData();
     void sendData(const std::string& data);
 
+    std::shared_ptr<EncryptionManager> encryptionManager_;
+
     boost::asio::io_context io_context_;
     boost::asio::ip::tcp::socket socket_;
     boost::asio::ip::tcp::resolver resolver_;
+
     std::string data_;
     std::mutex mtx_;
     Logger logger_;

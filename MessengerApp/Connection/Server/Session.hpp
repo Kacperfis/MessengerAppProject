@@ -7,6 +7,7 @@
 #include <string> 
 #include <iostream>
 
+#include <Encryption/EncryptionManager.hpp>
 #include "Common/Logger.hpp"
 
 namespace connection::session
@@ -22,6 +23,7 @@ private:
     void send(const std::string& data);
     void receive();
 
+    std::shared_ptr<EncryptionManager> encryptionManager_;
     std::map<std::string, std::shared_ptr<Session>>& activeSessions_;
     std::string data_;
     std::string username_;
