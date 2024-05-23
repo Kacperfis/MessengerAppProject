@@ -2,7 +2,10 @@
 #include "RegistrationHandler.hpp"
 #include <Helpers/UIHelper.hpp>
 
-RegistrationHandler::RegistrationHandler(const std::shared_ptr<IDatabaseController> databaseController, std::istream& inputStream)
+namespace registration
+{
+
+RegistrationHandler::RegistrationHandler(const std::shared_ptr<interface::IDatabaseController> databaseController, std::istream& inputStream)
     : databaseController_(databaseController), inputStream_(inputStream), logger_("RegistrationHandler") {};
 
 bool RegistrationHandler::registrationTrigger()
@@ -31,14 +34,18 @@ bool RegistrationHandler::registerUser()
 
 bool RegistrationHandler::isUserAlreadyRegistered(const std::map<std::string, std::string>& registeredUsersData)
 {
-    auto userData = std::ranges::find_if(registeredUsersData, [this](const auto& item){
+    auto userData = std::ranges::find_if(registeredUsersData,
+    [this](const auto& item)
+    {
         return item.first == login_;
     });
+
     if (userData != registeredUsersData.end())
     {
         logger_.log(Severity::warning, "User with given login is already registered");
         return true;
     }
+
     return false;
 }
 
@@ -47,3 +54,5 @@ void RegistrationHandler::saveUserDataForLoginAuthentication(const std::string& 
     login_ = login;
     password_ = password;
 }
+
+} // namespace registration

@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-#include <LoginHub/UserLoginHubCreator.hpp>
-#include <LoginHub/UserLoginHub.hpp>
+#include <Login/UserLoginHubCreator.hpp>
+#include <Login/UserLoginHub.hpp>
 #include <Tests/common/commonFixture.hpp>
 #include <Tests/mocks/RegistrationHandlerMock.hpp>
 #include <Common/Logger.hpp>
@@ -15,8 +15,8 @@ TEST(UserLoginHubTests, ShouldLoginAndLogoutSuccesfully)
     Logger::testName_ = "UserLoginHubTests_ShouldLoginAndLogoutSuccesfully";
     auto buffer = saveCleanOutputBuffer();
 
-    auto registrationHandlerMock = std::make_shared<RegistrationHandlerMock>();
-    auto LoginHubCreator = std::make_shared<UserLoginHubCreator>();
+    auto registrationHandlerMock = std::make_shared<mocks::RegistrationHandlerMock>();
+    auto LoginHubCreator = std::make_shared<login::UserLoginHubCreator>();
     auto LoginHub = LoginHubCreator->createHub();
 
     std::stringstream input("test_user\ntest_password\n");
@@ -45,8 +45,8 @@ TEST(UserLoginHubTests, ShouldNotLoginDueToNotExistingUserDataInDatabase)
     Logger::testName_ = "UserLoginHubTests_ShouldNotLoginDueToNotExistingUserDataInDatabase";
     auto buffer = saveCleanOutputBuffer();
 
-    auto registrationHandlerMock = std::make_shared<RegistrationHandlerMock>();
-    auto LoginHubCreator = std::make_shared<UserLoginHubCreator>();
+    auto registrationHandlerMock = std::make_shared<mocks::RegistrationHandlerMock>();
+    auto LoginHubCreator = std::make_shared<login::UserLoginHubCreator>();
     auto LoginHub = LoginHubCreator->createHub();
 
     std::stringstream input("test_user2\ntest_password2\n");

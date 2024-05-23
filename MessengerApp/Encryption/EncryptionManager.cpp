@@ -1,7 +1,11 @@
 #include "EncryptionManager.hpp"
 #include <openssl/evp.h>
 
-EncryptionManager::EncryptionManager(const std::string& path, const std::string& key, const std::string iv) : path_(path), key_(key), iv_(iv), logger_("EncryptionManager") {}
+namespace encryption
+{
+
+EncryptionManager::EncryptionManager(const std::string& path, const std::string& key, const std::string& iv)
+    : path_(path), key_(key), iv_(iv), logger_("EncryptionManager") {}
 
 void EncryptionManager::encryptDataAndSaveToUsersDatabase(const std::string& login, const std::string& password)
 {
@@ -118,3 +122,5 @@ const std::string EncryptionManager::decryptString(const std::string& ciphertext
 
     return std::string(reinterpret_cast<char*>(plaintext.get()), *lentgh + *finalLength);
 }
+
+} // namespace encryption

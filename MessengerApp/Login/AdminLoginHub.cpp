@@ -3,13 +3,16 @@
 #include "AdminLoginHub.hpp"
 #include <Helpers/LoginHubHelper.hpp>
 
+namespace login
+{
+
 AdminLoginHub::AdminLoginHub() : logger_("AdminLoginHub") {}
 
-bool AdminLoginHub::login(std::istream& stdInput, const std::shared_ptr<IRegistrationHandler>& registrationHandlerPtr)
+bool AdminLoginHub::login(std::istream& stdInput, const std::shared_ptr<interface::IRegistrationHandler>& registrationHandlerPtr)
 {
     logger_.log(Severity::info, "Logging to the Admin account");
     loginDataPtr_ = std::move(helpers::login(stdInput));
-    if (!setStatus(loginStatus::Logged))
+    if (!setStatus(login::loginStatus::Logged))
     {
         logger_.log(Severity::warning, "Login unsuccessful");
         return false;
@@ -19,7 +22,7 @@ bool AdminLoginHub::login(std::istream& stdInput, const std::shared_ptr<IRegistr
 
 bool AdminLoginHub::logout()
 {
-    if (!setStatus(loginStatus::LoggedOut))
+    if (!setStatus(login::loginStatus::LoggedOut))
     {
         logger_.log(Severity::warning, "Logout unsuccessful");
         return false;
@@ -32,14 +35,14 @@ bool AdminLoginHub::isLogged()
     return adminLogged_;
 }
 
-bool AdminLoginHub::setStatus(loginStatus status)
+bool AdminLoginHub::setStatus(login::loginStatus status)
 {
     switch (status)
     {
-        case loginStatus::Logged:
+        case login::loginStatus::Logged:
             adminLogged_ = true;
             break;
-        case loginStatus::LoggedOut:
+        case login::loginStatus::LoggedOut:
             adminLogged_ = false;
             break;
     }
@@ -50,3 +53,5 @@ const std::string AdminLoginHub::getUserLogin()
 {
     return loginDataPtr_->getLogin();
 }
+
+} // namespace login

@@ -13,8 +13,8 @@ TEST(RegistrationHandlerTests, shouldTriggerRegistrationAndRegisterUserSuccessfu
     auto buffer = saveCleanOutputBuffer();
 
     std::stringstream input("test_user2\ntest_password2\n");
-    auto databaseControllerMock = std::make_shared<DatabaseControllerMock>();
-    auto sut = std::make_shared<RegistrationHandler>(databaseControllerMock, input);
+    auto databaseControllerMock = std::make_shared<mocks::DatabaseControllerMock>();
+    auto sut = std::make_shared<registration::RegistrationHandler>(databaseControllerMock, input);
     std::map<std::string, std::string> registeredUsersData;
     registeredUsersData.insert(std::make_pair("test_user", "test_password"));
 
@@ -39,8 +39,8 @@ TEST(RegistrationHandlerTests, shouldTriggerRegistrationAndNotRegisterAlreadyReg
     auto buffer = saveCleanOutputBuffer();
 
     std::stringstream input("test_user\ntest_password\n");
-    auto databaseControllerMock = std::make_shared<DatabaseControllerMock>();
-    auto sut = std::make_shared<RegistrationHandler>(databaseControllerMock, input);
+    auto databaseControllerMock = std::make_shared<mocks::DatabaseControllerMock>();
+    auto sut = std::make_shared<registration::RegistrationHandler>(databaseControllerMock, input);
     std::map<std::string, std::string> registeredUsersData;
     registeredUsersData.insert(std::make_pair("test_user", "test_password"));
 

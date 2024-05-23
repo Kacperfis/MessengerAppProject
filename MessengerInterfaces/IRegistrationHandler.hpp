@@ -3,6 +3,9 @@
 #include <map>
 #include <string>
 
+namespace interface
+{
+
 class IRegistrationHandler
 {
 public:
@@ -12,3 +15,5 @@ public:
     virtual bool isUserAlreadyRegistered(const std::map<std::string, std::string>&) = 0;
     virtual void saveUserDataForLoginAuthentication(const std::string&, const std::string&) = 0;
 };
+
+} // namespace interface

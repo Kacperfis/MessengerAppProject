@@ -7,13 +7,13 @@
 namespace helpers
 {
 
-std::unique_ptr<LoginData> login(std::istream& stdInput)
+std::unique_ptr<login::LoginData> login(std::istream& stdInput)
 {
     std::string login, password;
     stdInput >> login;
     stdInput >> password;
 
-    return std::make_unique<LoginData>(login, password);
+    return std::make_unique<login::LoginData>(login, password);
 }
 
 bool checkUserCredentials(const std::string& login, const std::string& password, const std::map<std::string, std::string>& registeredUsersData)

@@ -3,14 +3,16 @@
 #include "MessengerAgent.hpp"
 #include <Helpers/UIHelper.hpp>
 
-MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& inputStream) :
-    userLoginHub_(std::make_shared<UserLoginHub>()),
-    AdminLoginHub_(std::make_shared<AdminLoginHub>()),
-    databaseController_(std::make_shared<DatabaseController>(databasePath)),
-    inputStream_(inputStream)
+namespace agent
 {
-    registrationHandler_ = std::make_shared<RegistrationHandler>(databaseController_, inputStream_);
 
+MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& inputStream) :
+    userLoginHub_(std::make_shared<login::UserLoginHub>()),
+    AdminLoginHub_(std::make_shared<login::AdminLoginHub>()),
+    databaseController_(std::make_shared<database::DatabaseController>(databasePath)),
+    inputStream_(inputStream),
+    registrationHandler_(std::make_shared<registration::RegistrationHandler>(databaseController_, inputStream_))
+{
     bool retryToMainWindow = true;
     while (retryToMainWindow)
     {
@@ -59,7 +61,6 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
                                 client_->sendMessage(username, recipient, message);
                             }
 
-
                             ioThread.join(); // Wait for the io_context thread to finish
                         }
                         case 2: // server
@@ -91,3 +92,5 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
         }
     }
 }
+
+} // namespace agent

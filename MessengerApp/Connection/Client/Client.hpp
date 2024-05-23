@@ -26,7 +26,7 @@ private:
     void readData();
     void sendData(const std::string& data);
 
-    std::shared_ptr<EncryptionManager> encryptionManager_;
+    std::shared_ptr<encryption::EncryptionManager> encryptionManager_;
 
     boost::asio::io_context io_context_;
     boost::asio::ip::tcp::socket socket_;

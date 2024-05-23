@@ -2,9 +2,12 @@
 #include <Helpers/LoginHubHelper.hpp>
 #include <Registration/RegistrationHandler.hpp>
 
+namespace login
+{
+
 UserLoginHub::UserLoginHub() : logger_("UserLoginHub") {}
 
-bool UserLoginHub::login(std::istream& stdInput, const std::shared_ptr<IRegistrationHandler>& registrationHandler)
+bool UserLoginHub::login(std::istream& stdInput, const std::shared_ptr<interface::IRegistrationHandler>& registrationHandler)
 {
     logger_.log(Severity::info, "Logging to the User account");
     loginDataPtr_ = std::move(helpers::login(stdInput));
@@ -14,7 +17,7 @@ bool UserLoginHub::login(std::istream& stdInput, const std::shared_ptr<IRegistra
     {
         if (helpers::checkUserCredentials(loginDataPtr_->getLogin(), loginDataPtr_->getPassword(), registeredUsersData))
         {
-            if (!setStatus(loginStatus::Logged))
+            if (!setStatus(login::loginStatus::Logged))
             {
                 logger_.log(Severity::warning, "Login unsuccessful");
                 return false;
@@ -28,7 +31,7 @@ bool UserLoginHub::login(std::istream& stdInput, const std::shared_ptr<IRegistra
 
 bool UserLoginHub::logout()
 {
-    if (!setStatus(loginStatus::LoggedOut))
+    if (!setStatus(login::loginStatus::LoggedOut))
     {
         logger_.log(Severity::warning, "Logout unsuccessful");
         return false;
@@ -41,14 +44,14 @@ bool UserLoginHub::isLogged()
     return userLogged_;
 }
 
-bool UserLoginHub::setStatus(loginStatus status)
+bool UserLoginHub::setStatus(login::loginStatus status)
 {
     switch (status)
     {
-        case loginStatus::Logged:
+        case login::loginStatus::Logged:
             userLogged_ = true;
             break;
-        case loginStatus::LoggedOut:
+        case login::loginStatus::LoggedOut:
             userLogged_ = false;
             break;
     }
@@ -59,3 +62,5 @@ const std::string UserLoginHub::getUserLogin()
 {
     return loginDataPtr_->getLogin();
 }
+
+} // namespace login

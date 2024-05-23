@@ -12,7 +12,7 @@ namespace connection::client
 Client::Client() :
     socket_(io_context_),
     resolver_(io_context_),
-    encryptionManager_(std::make_shared<EncryptionManager>("", "0123456789abcdef0123456789abcdef", "0123456789abcdef")),
+    encryptionManager_(std::make_shared<encryption::EncryptionManager>("", "0123456789abcdef0123456789abcdef", "0123456789abcdef")),
     logger_("Client") {}
 
 void Client::connect(const std::string& host, const std::string& port)

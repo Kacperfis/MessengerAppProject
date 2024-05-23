@@ -2,8 +2,11 @@
 #include <vector>
 #include <ranges>
 
+namespace database
+{
+
 DatabaseController::DatabaseController(const std::string& path) : encryptionManagerPtr_(
-    std::make_unique<EncryptionManager>(path, "0123456789abcdef0123456789abcdef", "0123456789abcdef")),
+    std::make_unique<encryption::EncryptionManager>(path, "0123456789abcdef0123456789abcdef", "0123456789abcdef")),
     logger_("DatabaseController") {}
 
 void DatabaseController::LoadDatabase()
@@ -32,3 +35,5 @@ const std::map<std::string, std::string> DatabaseController::getRegisteredUsersD
 {
     return registeredUsersData_;
 }
+
+} // namespace database

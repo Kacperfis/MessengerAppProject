@@ -11,7 +11,7 @@ TEST(EncryptionManagerTests, shouldEncryptAndDecryptTheMessageSuccesfully)
     const std::string key = "0123456789abcdef0123456789abcdef";
     const std::string iv = "0123456789abcdef";
     const std::string path = config::path::pathPrefix + "MessengerApp/Tests/testDatabases/encryptionManagerDB/";
-    auto encryptionManagerPtr = std::make_shared<EncryptionManager>(path, key, iv);
+    auto encryptionManagerPtr = std::make_shared<encryption::EncryptionManager>(path, key, iv);
 
     const std::string login = "UserLogin";
     const std::string password = "UserPassword";
@@ -30,7 +30,7 @@ TEST(EncryptionManagerTests, shouldEncryptTheDataSaveItToFileAndDecryptFromFileS
     const std::string iv = "0123456789abcdef";
     const std::string path = config::path::pathPrefix + "MessengerApp/Tests/testDatabases/encryptionManagerDB/";
 
-    auto encryptionManagerPtr = std::make_shared<EncryptionManager>(path, key, iv);
+    auto encryptionManagerPtr = std::make_shared<encryption::EncryptionManager>(path, key, iv);
     const std::string login = "UserLoginsasdsadsankJklsdajfkljsaldkjasAJKSDJSALKDJSALKDJ1232132131";
     const std::string password = "UserPa12839021738921aslkjnKJLDHASJKHSJKADHKJSAHDKJHA1daskjhjsahAashdjsadhskaj1243KSRssword";
 

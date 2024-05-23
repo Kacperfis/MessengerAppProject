@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-#include <LoginHub/AdminLoginHubCreator.hpp>
-#include <LoginHub/AdminLoginHub.hpp>
+#include <Login/AdminLoginHubCreator.hpp>
+#include <Login/AdminLoginHub.hpp>
 #include <Tests/common/commonFixture.hpp>
 #include <Common/Logger.hpp>
 

@@ -2,7 +2,10 @@
 #include <gmock/gmock.h>
 #include <../MessengerInterfaces/IRegistrationHandler.hpp>
 
-class RegistrationHandlerMock : public IRegistrationHandler
+namespace mocks
+{
+
+class RegistrationHandlerMock : public interface::IRegistrationHandler
 {
 public:
     MOCK_METHOD(bool, registrationTrigger, (), (override));
@@ -10,3 +13,5 @@ public:
     MOCK_METHOD(bool, isUserAlreadyRegistered, ((const std::map<std::string, std::string>&)), (override));
     MOCK_METHOD(void, saveUserDataForLoginAuthentication, (const std::string&, const std::string&), (override));
 };
+
+} // namespace mocks

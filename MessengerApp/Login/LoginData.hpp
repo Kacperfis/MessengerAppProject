@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
 
+namespace login
+{
+
 struct LoginData
 {
 public:
@@ -27,3 +30,5 @@ enum class loginStatus
     Logged,
     LoggedOut
 };
+
+} // namespace login
