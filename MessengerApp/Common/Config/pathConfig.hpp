@@ -10,7 +10,7 @@ inline std::string getPathPrefix(const std::filesystem::path& path)
 {
     auto currentPath = path.string();
     const std::string marker = "MessengerAppProject/";
-    size_t pos = currentPath.find(marker);
+    size_t pos = currentPath.rfind(marker);
     if (pos != std::string::npos)
     {
         return currentPath.substr(0, pos + marker.length());
