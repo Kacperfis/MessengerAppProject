@@ -21,7 +21,7 @@ public:
     const std::string getUserLogin() override;
 private:
     bool adminLogged_;
-    std::unique_ptr<login::LoginData> loginDataPtr_;
+    std::unique_ptr<login::LoginData> loginData_;
     Logger logger_;
 };
 

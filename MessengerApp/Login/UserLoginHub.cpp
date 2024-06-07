@@ -1,6 +1,5 @@
 #include "UserLoginHub.hpp"
 #include <Helpers/LoginHubHelper.hpp>
-#include <Registration/RegistrationHandler.hpp>
 
 namespace login
 {
@@ -11,9 +10,9 @@ bool UserLoginHub::login(std::istream& stdInput, const std::shared_ptr<interface
 {
     logger_.log(Severity::info, "Logging to the User account");
     loginDataPtr_ = std::move(helpers::login(stdInput));
-    auto registeredUsersData = registrationHandler->getUsersData();
-    registrationHandler->saveUserDataForLoginAuthentication(loginDataPtr_->getLogin(), loginDataPtr_->getPassword());
-    if (registrationHandler->isUserAlreadyRegistered(registeredUsersData))
+    auto registeredUsersData = registrationHandler->getData();
+    registrationHandler->saveDataForLoginAuthentication(loginDataPtr_->getLogin(), loginDataPtr_->getPassword());
+    if (registrationHandler->isPersonAlreadyRegistered(registeredUsersData))
     {
         if (helpers::checkUserCredentials(loginDataPtr_->getLogin(), loginDataPtr_->getPassword(), registeredUsersData))
         {
@@ -22,7 +21,7 @@ bool UserLoginHub::login(std::istream& stdInput, const std::shared_ptr<interface
                 logger_.log(Severity::warning, "Login unsuccessful");
                 return false;
             }
-            logger_.log(Severity::info, "Login Successful");
+            logger_.log(Severity::info, "Login successful");
             return true;
         }
     }

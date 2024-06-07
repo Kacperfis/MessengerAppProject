@@ -10,7 +10,7 @@
 using testing::Return;
 using testing::_;
 
-TEST(UserLoginHubTests, ShouldLoginAndLogoutSuccesfully)
+TEST(UserLoginHubTests, shouldLoginAndLogoutSuccesfully)
 {
     Logger::testName_ = "UserLoginHubTests_ShouldLoginAndLogoutSuccesfully";
     auto buffer = saveCleanOutputBuffer();
@@ -23,13 +23,13 @@ TEST(UserLoginHubTests, ShouldLoginAndLogoutSuccesfully)
     std::map<std::string, std::string> registeredUsersData;
     registeredUsersData.insert(std::make_pair("test_user", "test_password"));
 
-    EXPECT_CALL(*registrationHandlerMock, getUsersData())
+    EXPECT_CALL(*registrationHandlerMock, getData())
         .WillOnce(Return(registeredUsersData));
 
-    EXPECT_CALL(*registrationHandlerMock, saveUserDataForLoginAuthentication("test_user", "test_password"))
+    EXPECT_CALL(*registrationHandlerMock, saveDataForLoginAuthentication("test_user", "test_password"))
         .Times(1);
 
-    EXPECT_CALL(*registrationHandlerMock, isUserAlreadyRegistered(registeredUsersData))
+    EXPECT_CALL(*registrationHandlerMock, isPersonAlreadyRegistered(registeredUsersData))
         .WillOnce(Return(true));
 
     EXPECT_TRUE(LoginHub->login(input, registrationHandlerMock));
@@ -40,7 +40,7 @@ TEST(UserLoginHubTests, ShouldLoginAndLogoutSuccesfully)
     clearBuffer(buffer);
 }
 
-TEST(UserLoginHubTests, ShouldNotLoginDueToNotExistingUserDataInDatabase)
+TEST(UserLoginHubTests, shouldNotLoginDueToNotExistingUserDataInDatabase)
 {
     Logger::testName_ = "UserLoginHubTests_ShouldNotLoginDueToNotExistingUserDataInDatabase";
     auto buffer = saveCleanOutputBuffer();
@@ -53,13 +53,13 @@ TEST(UserLoginHubTests, ShouldNotLoginDueToNotExistingUserDataInDatabase)
     std::map<std::string, std::string> registeredUsersData;
     registeredUsersData.insert(std::make_pair("test_user", "test_password"));
 
-    EXPECT_CALL(*registrationHandlerMock, getUsersData())
+    EXPECT_CALL(*registrationHandlerMock, getData())
         .WillOnce(Return(registeredUsersData));
 
-    EXPECT_CALL(*registrationHandlerMock, saveUserDataForLoginAuthentication("test_user2", "test_password2"))
+    EXPECT_CALL(*registrationHandlerMock, saveDataForLoginAuthentication("test_user2", "test_password2"))
         .Times(1);
 
-    EXPECT_CALL(*registrationHandlerMock, isUserAlreadyRegistered(registeredUsersData))
+    EXPECT_CALL(*registrationHandlerMock, isPersonAlreadyRegistered(registeredUsersData))
         .WillOnce(Return(false));
 
     EXPECT_FALSE(LoginHub->login(input, registrationHandlerMock));

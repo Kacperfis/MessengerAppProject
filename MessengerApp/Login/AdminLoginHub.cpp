@@ -8,16 +8,27 @@ namespace login
 
 AdminLoginHub::AdminLoginHub() : logger_("AdminLoginHub") {}
 
-bool AdminLoginHub::login(std::istream& stdInput, const std::shared_ptr<interface::IRegistrationHandler>& registrationHandlerPtr)
+bool AdminLoginHub::login(std::istream& stdInput, const std::shared_ptr<interface::IRegistrationHandler>& registrationHandler)
 {
     logger_.log(Severity::info, "Logging to the Admin account");
-    loginDataPtr_ = std::move(helpers::login(stdInput));
-    if (!setStatus(login::loginStatus::Logged))
+    loginData_ = std::move(helpers::login(stdInput));
+    auto registeredAdminData = registrationHandler->getData();
+    registrationHandler->saveDataForLoginAuthentication(loginData_->getLogin(), loginData_->getPassword());
+
+    if (registrationHandler->isPersonAlreadyRegistered(registeredAdminData))
     {
-        logger_.log(Severity::warning, "Login unsuccessful");
-        return false;
+        if (helpers::checkUserCredentials(loginData_->getLogin(), loginData_->getPassword(), registeredAdminData))
+        {
+            if (!setStatus(login::loginStatus::Logged))
+            {
+                logger_.log(Severity::warning, "Login unsuccessful");
+                return false;
+            }
+            logger_.log(Severity::info, "Login successful");
+            return true;
+        }
     }
-    return true;
+    return false;
 }
 
 bool AdminLoginHub::logout()
@@ -51,7 +62,7 @@ bool AdminLoginHub::setStatus(login::loginStatus status)
 
 const std::string AdminLoginHub::getUserLogin()
 {
-    return loginDataPtr_->getLogin();
+    return loginData_->getLogin();
 }
 
 } // namespace login

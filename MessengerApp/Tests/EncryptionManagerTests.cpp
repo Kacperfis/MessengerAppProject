@@ -37,9 +37,9 @@ TEST(EncryptionManagerTests, shouldEncryptTheDataSaveItToFileAndDecryptFromFileS
     const std::string login2 = "aaaaaaabbbbbbbcCCCCC";
     const std::string password2 = "123213AAAAAAAAAAdf123";
 
-    encryptionManagerPtr->encryptDataAndSaveToUsersDatabase(login, password);
-    encryptionManagerPtr->encryptDataAndSaveToUsersDatabase(login2, password2);
-    auto resultVec = encryptionManagerPtr->decryptDataFromUsersDatabase();
+    encryptionManagerPtr->encryptDataAndSaveToDatabase(login, password);
+    encryptionManagerPtr->encryptDataAndSaveToDatabase(login2, password2);
+    auto resultVec = encryptionManagerPtr->decryptDataFromDatabase();
     EXPECT_EQ(resultVec.size(), 2);
     EXPECT_EQ(resultVec[0], login + "|" + password);
     EXPECT_EQ(resultVec[1], login2 + "|" + password2);

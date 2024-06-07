@@ -7,7 +7,7 @@ namespace encryption
 EncryptionManager::EncryptionManager(const std::string& path, const std::string& key, const std::string& iv)
     : path_(path), key_(key), iv_(iv), logger_("EncryptionManager") {}
 
-void EncryptionManager::encryptDataAndSaveToUsersDatabase(const std::string& login, const std::string& password)
+void EncryptionManager::encryptDataAndSaveToDatabase(const std::string& login, const std::string& password)
 {
     auto plaintext = login + "|" + password;
     auto ciphertext = encryptString(plaintext);
@@ -25,7 +25,7 @@ void EncryptionManager::encryptDataAndSaveToUsersDatabase(const std::string& log
     else logger_.log(Severity::error, "Error opening file");
 }
 
-const std::vector<std::string> EncryptionManager::decryptDataFromUsersDatabase()
+const std::vector<std::string> EncryptionManager::decryptDataFromDatabase()
 {
     std::vector<std::string> decryptedContent;
     auto currentNumberOfFiles = std::stoi(getCurrentFileIndex(path_));

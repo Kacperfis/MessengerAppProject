@@ -3,7 +3,7 @@ set(TARGET_NAME MessengerApp)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(MESSENGER_APP_SOURCES
-    # main.cpp # uncomment to create the binary
+    #main.cpp # uncomment to create the binary
     Common/Logger.cpp
     Connection/Client/Client.cpp
     Connection/Server/Server.cpp
@@ -16,11 +16,13 @@ set(MESSENGER_APP_SOURCES
     Login/UserLoginHub.cpp
     Login/AdminLoginHubCreator.cpp
     Login/UserLoginHubCreator.cpp
-    Registration/RegistrationHandler.cpp
+    Registration/UserRegistrationHandler.cpp
+    Registration/AdminRegistrationHandler.cpp
     Encryption/EncryptionManager.cpp
     Helpers/LoginHubHelper.cpp
     Helpers/UIHelper.cpp
-    Database/DatabaseController.cpp
+    Database/UserDatabaseController.cpp
+    Database/AdminDatabaseController.cpp
 )
 set(MESSENGER_APP_HEADERS
     Common/Logger.hpp
@@ -37,11 +39,13 @@ set(MESSENGER_APP_HEADERS
     Login/AdminLoginHubCreator.hpp
     Login/UserLoginHubCreator.hpp
     Login/LoginData.hpp
-    Registration/RegistrationHandler.hpp
+    Registration/UserRegistrationHandler.hpp
+    Registration/AdminRegistrationHandler.hpp
     Encryption/EncryptionManager.hpp
     Helpers/LoginHubHelper.hpp
     Helpers/UIHelper.hpp
-    Database/DatabaseController.hpp
+    Database/UserDatabaseController.hpp
+    Database/AdminDatabaseController.hpp
 )
 
 find_package(Boost REQUIRED)
@@ -65,8 +69,10 @@ set(TEST_SOURCES
     Tests/UserLoginHubTests.cpp
     Tests/AdminLoginHubTests.cpp
     Tests/EncryptionManagerTests.cpp
-    Tests/DatabaseControllerTests.cpp
-    Tests/RegistrationHandlerTests.cpp
+    Tests/UserDatabaseControllerTests.cpp
+    Tests/AdminDatabaseControllerTests.cpp
+    Tests/UserRegistrationHandlerTests.cpp
+    Tests/AdminRegistrationHandlerTests.cpp
 )
 
 set(UT_DRIVER ut)

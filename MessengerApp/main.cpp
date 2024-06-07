@@ -3,6 +3,10 @@
 
 int main()
 {
-    MessengerAgent(config::path::pathPrefix + "MessengerApp/Database/RegisteredUserData/", std::cin);
+    agent::MessengerAgent(
+        config::path::pathPrefix + "MessengerApp/Database/RegisteredUserData/",
+        config::path::pathPrefix + "MessengerApp/Database/RegisteredAdminData/",
+        std::cin);
+
     return 0;
 }

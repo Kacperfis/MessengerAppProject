@@ -91,6 +91,12 @@ void Client::stop()
     if (socket_.is_open())
     {
         boost::system::error_code errorCode;
+        socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, errorCode);
+        if (errorCode)
+        {
+            logger_.log(Severity::error, "Error on socket shutdown during disconnect: " + errorCode.message());
+            std::cerr << "Error on socket shutdown during disconnect: " << errorCode.message() << std::endl;
+        }
         socket_.close(errorCode);
         if (errorCode)
         {

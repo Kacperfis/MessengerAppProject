@@ -18,8 +18,8 @@ class EncryptionManager
 public:
     EncryptionManager(const std::string& path, const std::string& key, const std::string& iv);
 
-    void encryptDataAndSaveToUsersDatabase(const std::string& login, const std::string& password);
-    const std::vector<std::string> decryptDataFromUsersDatabase();
+    void encryptDataAndSaveToDatabase(const std::string& login, const std::string& password);
+    const std::vector<std::string> decryptDataFromDatabase();
 
     const std::string encryptString(const std::string& plaintext);
     const std::string decryptString(const std::string& ciphertext);

@@ -6,12 +6,14 @@
 namespace agent
 {
 
-MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& inputStream) :
-    userLoginHub_(std::make_shared<login::UserLoginHub>()),
-    AdminLoginHub_(std::make_shared<login::AdminLoginHub>()),
-    databaseController_(std::make_shared<database::DatabaseController>(databasePath)),
+MessengerAgent::MessengerAgent(const std::string& usersDatabasePath, const std::string& adminDatabasePath, std::istream& inputStream) :
     inputStream_(inputStream),
-    registrationHandler_(std::make_shared<registration::RegistrationHandler>(databaseController_, inputStream_))
+    userLoginHub_(std::make_shared<login::UserLoginHub>()),
+    adminLoginHub_(std::make_shared<login::AdminLoginHub>()),
+    userDatabaseController_(std::make_shared<database::UserDatabaseController>(usersDatabasePath)),
+    adminDatabaseController_(std::make_shared<database::AdminDatabaseController>(adminDatabasePath)),
+    userRegistrationHandler_(std::make_shared<registration::UserRegistrationHandler>(userDatabaseController_, inputStream)),
+    adminRegistrationHandler_(std::make_shared<registration::AdminRegistrationHandler>(adminDatabaseController_, inputStream))
 {
     bool retryToMainWindow = true;
     while (retryToMainWindow)
@@ -23,45 +25,39 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
         {
             case 1:
             {
-                auto registrationResult = registrationHandler_->registrationTrigger();
-                if (registrationResult) helpers::userSuccessfullyRegisteredMessage();
-                else helpers::userAlreadyRegisteredMessage();
+                handleRegistration();
                 break;
             }
             case 2:
             {
-                std::cout << "enter your login and password" << std::endl;
-                auto loginResult = userLoginHub_->login(inputStream_, registrationHandler_);
-                if (loginResult)
+                auto loginResult = handleLogin();
+                if (loginResult.first)
                 {
                     std::cout << "successfully logged in" << std::endl;
                     retryToMainWindow = false;
 
-                    helpers::showServerOrClientChoiceForm();
+                    if (loginResult.second == AccountType::User)
+                    {
+                        helpers::showServerOrClientChoiceFormForUser();
+                    }
+                    else
+                    {
+                        helpers::showServerOrClientChoiceFormForAdmin();
+                    }
+
                     int serviceChoice;
                     inputStream_ >> serviceChoice;
                     switch (serviceChoice)
                     {
                         case 1: // client
                         {
-                            client_ = std::make_shared<connection::client::Client>();
-                            client_->connect("127.0.0.1", "8080");
-                            std::thread ioThread([this] { client_->run(); }); // Run io_context in a separate thread
-
-                            auto username = userLoginHub_->getUserLogin();
-                            client_->login(username);
-                            std::string recipient, message;
-                            std::cout << std::endl;
-                            std::cout << "Enter recipient (or 'exit' to logout): " << std::endl;
-                            std::cin >> recipient;
-                            std::cout << "Enter your message: ";
                             while (true)
                             {
-                                std::getline(std::cin, message);
-                                client_->sendMessage(username, recipient, message);
+                                std::string username;
+                                loginResult.second == AccountType::User ? username = userLoginHub_->getUserLogin() : username = adminLoginHub_->getUserLogin();
+                                auto result = startClient(username);
+                                if (result) break;
                             }
-
-                            ioThread.join(); // Wait for the io_context thread to finish
                         }
                         case 2: // server
                         {
@@ -74,6 +70,7 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
                             break;
                         }
                     }
+                    break;
                 }
                 else std::cout << "logging failed!" << std::endl;
                 break;
@@ -91,6 +88,104 @@ MessengerAgent::MessengerAgent(const std::string& databasePath, std::istream& in
             }
         }
     }
+}
+
+void MessengerAgent::handleRegistration()
+{
+    helpers::showRegistrationOptionPage();
+    int accountType;
+    inputStream_ >> accountType;
+
+    switch (accountType)
+    {
+        case 1:
+        {
+            auto registrationResult = userRegistrationHandler_->registrationTrigger();
+            if (registrationResult) helpers::userSuccessfullyRegisteredMessage();
+            else helpers::userAlreadyRegisteredMessage();
+            break;
+        }
+        case 2:
+        {
+            auto registrationResult = adminRegistrationHandler_->registrationTrigger();
+            if (registrationResult) helpers::userSuccessfullyRegisteredMessage();
+            else helpers::adminAlreadyRegisteredMessage();
+            break;
+        }
+        default:
+        {
+            std::cerr << "Invalid choice, please try again" << std::endl;
+            break;
+        }
+    }
+}
+
+std::pair<bool, AccountType> MessengerAgent::handleLogin()
+{
+    helpers::showLoginOptionPage();
+    int accountType;
+    inputStream_ >> accountType;
+    std::cout << "enter your login and password" << std::endl;
+    switch (accountType)
+    {
+        case 1:
+        {
+            return std::make_pair(userLoginHub_->login(inputStream_, userRegistrationHandler_), AccountType::User);
+            break;
+        }
+        case 2:
+        {
+            return std::make_pair(adminLoginHub_->login(inputStream_, adminRegistrationHandler_), AccountType::Admin);
+            break;
+        }
+        default:
+        {
+            std::cerr << "Invalid choice, please try again" << std::endl;
+            break;
+        }
+    }
+
+    return {};
+}
+
+bool MessengerAgent::startClient(const std::string& username)
+{
+    client_ = std::make_shared<connection::client::Client>();
+    client_->connect("127.0.0.1", "8080");
+    std::thread ioThread([this] { client_->run(); }); // run io_context in a separate thread
+
+    client_->login(username);
+    std::string recipient, message;
+    std::cout << std::endl;
+    std::cout << "Enter recipient (or 'EXIT'): " << std::endl;
+    std::cin >> recipient;
+    std::cin.ignore();
+    if (recipient == "EXIT")
+    {
+        ioThread.join();
+        client_->stop();
+        return true;
+    }
+    while (true)
+    {
+        std::cout << "Enter your message (or 'EXIT'): " << std::endl;
+        std::getline(std::cin, message);
+        if (message == "EXIT")
+        {
+            break;
+        }
+        client_->sendMessage(username, recipient, message);
+    }
+
+    ioThread.join(); // wait for the io_context thread to finish
+    client_->stop();
+    return true;
+}
+
+void MessengerAgent::startServer()
+{
+    server_ = std::make_shared<connection::server::Server>();
+    server_->start();
 }
 
 } // namespace agent
