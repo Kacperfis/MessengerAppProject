@@ -28,6 +28,7 @@ TEST(EncryptionManagerTests, shouldEncryptTheDataSaveItToFileAndDecryptFromFileS
     Logger::testName_ = "EncryptionManagerTests_shouldEncryptTheDataSaveItToFileAndDecryptFromFileSuccesfully";
     const std::string key = "0123456789abcdef0123456789abcdef";
     const std::string iv = "0123456789abcdef";
+    std::cout << "PATH_PREFIX: " << config::path::pathPrefix << std::endl;
     const std::string path = config::path::pathPrefix + "MessengerApp/Tests/testDatabases/encryptionManagerDB/";
 
     auto encryptionManagerPtr = std::make_shared<encryption::EncryptionManager>(path, key, iv);
