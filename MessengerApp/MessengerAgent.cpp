@@ -61,8 +61,7 @@ MessengerAgent::MessengerAgent(const std::string& usersDatabasePath, const std::
                         }
                         case 2: // server
                         {
-                            server_ = std::make_shared<connection::server::Server>();
-                            server_->start();
+                            startServer();
                         }
                         default:
                         {
