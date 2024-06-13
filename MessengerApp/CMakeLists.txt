@@ -73,6 +73,8 @@ set(TEST_SOURCES
     Tests/AdminDatabaseControllerTests.cpp
     Tests/UserRegistrationHandlerTests.cpp
     Tests/AdminRegistrationHandlerTests.cpp
+    Tests/MessageTests.cpp
+    Tests/MessageHandlerTests.cpp
 )
 
 set(UT_DRIVER ut)

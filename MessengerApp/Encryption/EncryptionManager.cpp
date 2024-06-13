@@ -25,7 +25,7 @@ void EncryptionManager::encryptDataAndSaveToDatabase(const std::string& login, c
     else logger_.log(Severity::error, "Error opening file");
 }
 
-const std::vector<std::string> EncryptionManager::decryptDataFromDatabase()
+std::vector<std::string> EncryptionManager::decryptDataFromDatabase()
 {
     std::vector<std::string> decryptedContent;
     auto currentNumberOfFiles = std::stoi(getCurrentFileIndex(path_));
@@ -87,7 +87,7 @@ void EncryptionManager::updateCurrentFileIndex(const std::string& path, const in
     else logger_.log(Severity::error, "Error opening index file to update");
 }
 
-const std::string EncryptionManager::encryptString(const std::string& plaintext)
+std::string EncryptionManager::encryptString(const std::string& plaintext) const
 {
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
     auto charTypeKey = reinterpret_cast<const unsigned char*>(key_.c_str());
@@ -105,7 +105,7 @@ const std::string EncryptionManager::encryptString(const std::string& plaintext)
     return std::string(reinterpret_cast<char*>(ciphertext.get()), *length + *finalLength);
 }
 
-const std::string EncryptionManager::decryptString(const std::string& ciphertext)
+std::string EncryptionManager::decryptString(const std::string& ciphertext) const
 {
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
     auto charTypeKey = reinterpret_cast<const unsigned char*>(key_.c_str());

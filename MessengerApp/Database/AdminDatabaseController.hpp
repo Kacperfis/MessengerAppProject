@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include <map>
+#include <Common/Logger.hpp>
 #include <Encryption/EncryptionManager.hpp>
 #include <../MessengerInterfaces/IDatabaseController.hpp>
 
