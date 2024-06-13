@@ -8,21 +8,22 @@
 #include <sstream>
 #include <algorithm>
 
+#include <../MessengerInterfaces/IEncryptionManager.hpp>
 #include <Common/Logger.hpp>
 
 namespace encryption
 {
 
-class EncryptionManager
+class EncryptionManager : public interface::IEncryptionManager
 {
 public:
     EncryptionManager(const std::string& path, const std::string& key, const std::string& iv);
 
-    void encryptDataAndSaveToDatabase(const std::string& login, const std::string& password);
-    const std::vector<std::string> decryptDataFromDatabase();
+    void encryptDataAndSaveToDatabase(const std::string& login, const std::string& password) override;
+    std::vector<std::string> decryptDataFromDatabase() override;
 
-    const std::string encryptString(const std::string& plaintext);
-    const std::string decryptString(const std::string& ciphertext);
+    std::string encryptString(const std::string& plaintext) const override;
+    std::string decryptString(const std::string& ciphertext) const override;
 private:
     std::string getCurrentFileIndex(const std::string& path);
     void updateCurrentFileIndex(const std::string& path, const int& currentIndex);
