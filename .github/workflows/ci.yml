@@ -40,7 +40,7 @@ jobs:
       working-directory: ${{env.BUILD_PATH}}
       run: |
         gcovr -r .. --exclude '.*Tests.*' --exclude '.*CMakeFiles/.*' --exclude '.*CompilerIdCXX/.*' --filter '.*\.cpp' --xml-pretty --output coverage.xml
-        gcovr -r .. --exclude '.*Tests.*' --exclude '.*CMakeFiles/.*' --exclude '.*CompilerIdCXX/.*' --filter '.*\.cpp' --html --html-details -o coverage.html
+        gcovr -r .. --exclude '.*Tests.*' --exclude '.*CMakeFiles/.*' --exclude '.*CompilerIdCXX/.*' --filter '.*\.cpp' --html --html-details --html-title "Coverage Report for MessengerApp" --html-medium-threshold 75 --html-high-threshold 90 -o coverage.html
 
     - name: Upload coverage report
       uses: actions/upload-artifact@v2
