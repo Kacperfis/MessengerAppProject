@@ -75,6 +75,7 @@ set(TEST_SOURCES
     Tests/AdminRegistrationHandlerTests.cpp
     Tests/MessageTests.cpp
     Tests/MessageHandlerTests.cpp
+    Tests/MessageDecoderTests.cpp
 )
 
 set(UT_DRIVER ut)
